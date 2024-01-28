@@ -14,6 +14,8 @@
   &__container {
     margin: 0 auto;
     max-width: var(--width-container);
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
   &__body {
     display: flex;

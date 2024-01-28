@@ -22,6 +22,9 @@ const props = defineProps<Props>();
     &:hover {
       color: var(--color-primary);
     }
+    &.router-link-active {
+      color: var(--color-primary);
+    }
   }
 }
 </style>

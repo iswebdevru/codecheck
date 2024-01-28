@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const dropdownItems = [
   {
-    to: "/",
+    to: "/profile",
     name: "Мой профиль",
   },
   {
