@@ -79,7 +79,7 @@ const challenges = [
     font-size: 2rem;
   }
   &__description {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
   &__tag {
     background: black;
