@@ -1,22 +1,41 @@
 <script setup lang="ts">
+const { signIn, token, data, status, lastRefreshedAt } = useAuth();
 const username = ref("");
 const password = ref("");
+definePageMeta({
+  // unauthenticatedOnly: true,
+  // navigateAuthenticatedTo: '/'
+  middleware: "unauthenticated-only",
+});
 </script>
 
 <template>
   <div class="form">
     <div class="form__container">
-      <form class="form__body">
+      <!-- {{ status }} -->
+      <form
+        @submit.prevent="
+          signIn({ username, password }, { callbackUrl: '/profile' })
+        "
+        class="form__body"
+      >
         <h1 class="form__title">Авторизация</h1>
         <div class="form__item">
-          <LabelInput for="test">Логин</LabelInput>
-          <TextInput id="test" name="username" v-model="username"></TextInput>
+          <LabelInput for="user">Логин</LabelInput>
+          <TextInput id="user" name="username" v-model="username"></TextInput>
         </div>
         <div class="form__item">
-          <LabelInput for="test">Пароль</LabelInput>
-          <TextInput id="test" name="password" v-model="password"></TextInput>
+          <LabelInput for="pass">Пароль</LabelInput>
+          <TextInput
+            id="pass"
+            type="password"
+            name="password"
+            v-model="password"
+          ></TextInput>
         </div>
-        <FormButton :background="'var(--color-primary)'">Войти</FormButton>
+        <FormButton type="submit" :background="'var(--color-primary)'"
+          >Войти</FormButton
+        >
       </form>
     </div>
   </div>

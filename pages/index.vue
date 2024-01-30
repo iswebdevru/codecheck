@@ -1,3 +1,7 @@
+<script setup>
+definePageMeta({ auth: true });
+</script>
+
 <template>
   <div class="home">
     <div class="home__container">

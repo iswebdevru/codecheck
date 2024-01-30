@@ -25,7 +25,7 @@ const emits = defineEmits(["update:modelValue"]);
 .textinput {
   padding: 0.375rem 0.75rem;
   border-radius: var(--border-radius);
-  border: 1px solid var(--color-text-link);
+  border: 1px solid var(--color-border-primary);
   // width: 100%;
   display: flex;
 }

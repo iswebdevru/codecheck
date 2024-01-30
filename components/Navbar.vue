@@ -1,13 +1,14 @@
 <script setup lang="ts">
+const { status } = useAuth();
 const dropdownItems = [
   {
     to: "/profile",
     name: "Мой профиль",
   },
-  {
-    to: "/",
-    name: "Выйти",
-  },
+  // {
+  //   to: "/",
+  //   name: "Выйти",
+  // },
 ];
 </script>
 
@@ -16,7 +17,13 @@ const dropdownItems = [
     <div class="nav__list">
       <NavbarItem to="/">Главная</NavbarItem>
       <NavbarItem to="/challenges">Задания</NavbarItem>
-      <NavbarDropdownItem :items="dropdownItems">Иван</NavbarDropdownItem>
+
+      <NavbarDropdownItem
+        v-if="status === 'authenticated'"
+        :items="dropdownItems"
+        >Иван</NavbarDropdownItem
+      >
+      <NavbarItem v-else to="/login">Войти</NavbarItem>
     </div>
   </nav>
 </template>

@@ -7,13 +7,14 @@ interface dropdownItem {
 interface Props {
   items: dropdownItem[];
 }
+const { signOut } = useAuth();
 const props = defineProps<Props>();
 const dropdown = ref();
 const open = ref(false);
 
 const handleOpen = () => {
   const closeListerner = (e: Event) => {
-    if (!(e.target === dropdown.value || dropdown.value.contains(e.target)))
+    if (!(e.target === dropdown.value || dropdown.value?.contains(e.target)))
       window.removeEventListener("click", closeListerner), (open.value = false);
   };
   window.addEventListener("click", closeListerner);
@@ -54,6 +55,9 @@ onMounted(() => {});
         class="dropdown__item"
         >{{ item.name }}</NuxtLink
       >
+      <button class="dropdown__item" @click="signOut({ callbackUrl: '/' })">
+        Выйти
+      </button>
     </div>
   </div>
 </template>
