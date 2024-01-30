@@ -78,6 +78,7 @@ onMounted(() => {});
     // }
   }
   &__item_dropdown {
+    font-size: 1rem;
     position: relative;
     cursor: pointer;
     &[aria-expanded="true"] .dropdown {

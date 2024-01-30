@@ -24,23 +24,6 @@ const getCodemirrorStates = () => {
   // more state info ...
   // return ...
 };
-
-// export default defineComponent({
-//   components: {
-//     Codemirror,
-//   },
-//   setup() {
-
-//
-
-//     return {
-//       code,
-//       extensions,
-//       handleReady,
-//       log: console.log,
-//     };
-//   },
-// });
 </script>
 
 <template>
@@ -48,49 +31,45 @@ const getCodemirrorStates = () => {
     <div class="challenge__container">
       <div class="challenge__body">
         <div class="challenge__left left">
-          <div class="left__tabs tabs">
-            <button class="tabs__tab">Инструкции</button>
-          </div>
-          <div class="left__body">
-            <div class="left__top">
-              <h2 class="left__title"></h2>
-              <div class="left__tags">
-                <span class="left__tag">ffff</span>
-              </div>
-            </div>
-            <div class="left__bottom"></div>
-          </div>
+          <TabsWrapper>
+            <Tab title="Инструкция"> Инструкция </Tab>
+            <Tab title="Решение"> Решение </Tab>
+          </TabsWrapper>
         </div>
         <div class="challenge__right right">
-          <div class="right__tabs tabs">
-            <button class="tabs__tab">Код</button>
-            <button class="tabs__tab">Вывод</button>
-            <button class="tabs__tab">Тесты</button>
-          </div>
-          <div class="right__body">
-            <codemirror
-              v-model="code"
-              placeholder="Здесь пишем код"
-              :style="{
-                height: '300px',
-                'font-size': '1rem',
-              }"
-              :autofocus="true"
-              :indent-with-tab="true"
-              :tab-size="2"
-              :extensions="extensions"
-              @ready="handleReady"
-              @change="console.log('change', $event)"
-              @focus="console.log('focus', $event)"
-              @blur="console.log('blur', $event)"
-            />
-            <div class="right__btns">
-              <button class="right__btn">Проверить</button>
-            </div>
-          </div>
+          <TabsWrapper>
+            <Tab title="Код"
+              ><codemirror
+                v-model="code"
+                placeholder="Здесь пишем код"
+                :style="{
+                  height: '300px',
+                  'font-size': '1rem',
+                }"
+                :autofocus="true"
+                :indent-with-tab="true"
+                :tab-size="2"
+                :extensions="extensions"
+                @ready="handleReady"
+                @change="console.log('change', $event)"
+                @focus="console.log('focus', $event)"
+                @blur="console.log('blur', $event)"
+              />
+              <div class="right__btns">
+                <FormButton
+                  background="var(--color-warning)"
+                  color="var(--color-text-primary)"
+                  class="right__btn"
+                  >Проверить</FormButton
+                >
+              </div>
+            </Tab>
+            <Tab title="Вывод"> asdf</Tab>
+            <Tab title="Тесты"> </Tab>
+          </TabsWrapper>
         </div>
       </div>
-      {{ $route.params.id }}
+      <!-- {{ $route.params.id }} -->
     </div>
   </div>
 </template>
@@ -109,7 +88,7 @@ const getCodemirrorStates = () => {
   }
   &__body {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     column-gap: 2rem;
   }
 }
@@ -123,13 +102,24 @@ const getCodemirrorStates = () => {
   &__body {
     margin-top: 2rem;
   }
+  &__btns {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+  &__btn {
+    max-width: 200px;
+  }
 }
 .tabs {
-  border-bottom: 1px rgba(128, 128, 128, 0.334) solid;
+  border-bottom: 1px var(--color-text-link) solid;
+
   &__tab {
     padding: 1rem 1.2rem;
     font-size: 1.2rem;
-    &:hover {
+    margin-bottom: -1px;
+    border-bottom: 1px var(--color-text-link) solid;
+    &.tab_active {
       color: var(--color-primary);
       // background: rgba(128, 128, 128, 0.225);
       border-bottom: 1px var(--color-primary) solid;

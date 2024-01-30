@@ -2,10 +2,14 @@
 
 :root {
   --color-primary: #3b82f6;
+  --color-danger: #ef4444;
+  --color-warning: #facc15;
   --color-text-primary: #000000;
+  --color-text-secondary: #ffffff;
   --color-text-link: #9ca3af;
 
   --width-container: 1200px;
+  --border-radius: 0.375rem;
 }
 
 body {

@@ -12,6 +12,7 @@ const props = defineProps<Props>();
 <style scoped lang="scss">
 .nav {
   &__item {
+    font-size: 1rem;
     padding: 1rem;
     display: flex;
     align-items: center;
