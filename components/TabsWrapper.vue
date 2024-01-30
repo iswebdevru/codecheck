@@ -25,15 +25,16 @@ provide("selectedTitle", selectedTitle);
 
 <style scoped lang="scss">
 .tabs {
-  border-bottom: 1px var(--color-text-link) solid;
+  border-bottom: 1px var(--color-border-primary) solid;
   &__body {
     margin-top: 2rem;
+    padding: 0 1rem;
   }
   &__tab {
     padding: 1rem 1.2rem;
     font-size: 1rem;
     margin-bottom: -1px;
-    border-bottom: 1px var(--color-text-link) solid;
+    border-bottom: 1px var(--color-border-primary) solid;
     &.tab_active {
       color: var(--color-primary);
       // background: rgba(128, 128, 128, 0.225);

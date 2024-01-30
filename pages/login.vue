@@ -7,6 +7,7 @@ const password = ref("");
   <div class="form">
     <div class="form__container">
       <form class="form__body">
+        <h1 class="form__title">Авторизация</h1>
         <div class="form__item">
           <LabelInput for="test">Логин</LabelInput>
           <TextInput id="test" name="username" v-model="username"></TextInput>
@@ -23,13 +24,21 @@ const password = ref("");
 
 <style scoped lang="scss">
 .form {
+  margin-top: 2rem;
+  &__title {
+    font-size: 1.5rem;
+  }
   &__container {
-    margin: 30vh auto 0 auto;
-    max-width: 220px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    // margin: 30vh auto 0 auto;
   }
   &__body {
+    max-width: 220px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
   }
   &__item {

@@ -89,7 +89,7 @@ const getCodemirrorStates = () => {
   &__body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    column-gap: 2rem;
+    gap: 2rem;
   }
 }
 

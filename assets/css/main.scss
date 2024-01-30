@@ -4,9 +4,14 @@
   --color-primary: #3b82f6;
   --color-danger: #ef4444;
   --color-warning: #facc15;
+
+  --color-bg-primary: #ffffff;
+
   --color-text-primary: #000000;
   --color-text-secondary: #ffffff;
   --color-text-link: #9ca3af;
+
+  --color-border-primary: #e5e7eb;
 
   --width-container: 1200px;
   --border-radius: 0.375rem;
@@ -14,6 +19,7 @@
 
 body {
   font-family: Rubik;
+  background: var(--color-bg-primary);
   margin: 0;
 }
 
@@ -60,17 +66,6 @@ button,
 select {
   /* 1 */
   text-transform: none;
-}
-
-/**
-  * Correct the inability to style clickable types in iOS and Safari.
-  */
-
-button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: button;
 }
 
 /**

@@ -12,6 +12,6 @@ const props = defineProps<Props>();
 
 <style scoped lang="scss">
 .label {
-  color: var(--color-text-link);
+  color: var(--color-text-primary);
 }
 </style>
