@@ -34,6 +34,7 @@ const dropdownItems = [
     gap: 1rem;
     font-size: 1.2rem;
     list-style: none;
+    flex-wrap: wrap;
   }
 }
 </style>

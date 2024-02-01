@@ -7,6 +7,7 @@
 
   --color-bg-primary: #ffffff;
   --color-bg-secondary: #363636;
+  --color-bg-third: #f4f4f4;
 
   --color-text-primary: #000000;
   --color-text-secondary: #ffffff;
@@ -34,6 +35,11 @@ button {
   background: none;
   border: none;
   cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-text-primary);
 }
 
 /**

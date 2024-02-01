@@ -1,13 +1,13 @@
 <script setup></script>
 
 <template>
-  <div class="logo">КодЧек</div>
+  <NuxtLink to="/" class="logo">КодЧек👨‍💻</NuxtLink>
 </template>
 
 <style scoped lang="scss">
 .logo {
   display: flex;
   align-items: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 </style>

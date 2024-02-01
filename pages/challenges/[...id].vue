@@ -4,6 +4,10 @@ import { python } from "@codemirror/lang-python";
 // import { oneDark } from "@codemirror/theme-one-dark";
 import { darcula, darculaInit } from "@uiw/codemirror-theme-darcula";
 
+useHead({
+  title: "Задание",
+});
+
 const code = ref(`def hello_world():`);
 const extensions = [python(), darcula];
 

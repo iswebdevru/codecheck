@@ -1,4 +1,7 @@
 <script setup>
+useHead({
+  title: "Главная",
+});
 definePageMeta({ auth: true });
 </script>
 

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+useHead({
+  title: "Задания",
+});
 const challenges = [
   {
     id: 1,
@@ -30,9 +33,11 @@ const challenges = [
 <template>
   <div class="challenges">
     <div class="challenges__container">
-      <div class="challenges__aside"></div>
+      <div class="challenges__aside">
+        <TextInput placeholder="Поиск" model-value="" name="" id=""></TextInput>
+      </div>
       <div class="challenges__body">
-        <h1 class="">Задания</h1>
+        <!-- <h1 class="">Задания</h1> -->
         <div class="challenges__items">
           <div
             v-for="item in challenges"
@@ -57,15 +62,26 @@ const challenges = [
 
 <style scoped lang="scss">
 .challenges {
+  &__aside {
+    // box-shadow: 0 0 10px rgba(0, 0, 0, 0.086);
+    // border-radius: var(--border-radius);
+    padding: 1rem 1rem;
+  }
+  &__body {
+  }
   &__container {
     margin: 0 auto;
     max-width: var(--width-container);
+
     padding-right: 1rem;
     padding-left: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    // gap: 2rem;
   }
   &__items {
     display: grid;
-    grid-template-rows: auto;
+    // grid-template-rows: auto;
     row-gap: 2rem;
   }
 }
@@ -79,6 +95,7 @@ const challenges = [
     font-size: 2rem;
   }
   &__description {
+    margin-top: 1rem;
     font-size: 1rem;
   }
   &__tag {
@@ -87,6 +104,9 @@ const challenges = [
     font-size: 0.9rem;
     padding: 0.4rem;
     border-radius: 0.3rem;
+  }
+  &__tags {
+    margin-top: 1rem;
   }
 }
 </style>

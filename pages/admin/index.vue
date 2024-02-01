@@ -1,4 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+useHead({
+  title: "Админ",
+});
+definePageMeta({
+  middleware: "admin",
+});
+</script>
 
 <template>
   <div class="admin">

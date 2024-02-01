@@ -44,9 +44,10 @@ model Challenge {
 model ChallengeVariant {
   id             Int        @id @default(autoincrement())
   mdInstructrion String
-  language       String
   test           String
   Solutions      Solution[]
+  lang           Language   @relation(fields: [languageId], references: [id])
+  languageId     Int
 }
 
 model Solution {
@@ -58,4 +59,10 @@ model Solution {
   updatedAt          DateTime         @updatedAt
   userId             String
   user               User             @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Language {
+  id               Int                @id @default(autoincrement())
+  name             String
+  ChallengeVariant ChallengeVariant[]
 }
