@@ -17,10 +17,11 @@ const dropdownItems = [
     <div class="nav__list">
       <NavbarItem to="/">Главная</NavbarItem>
       <NavbarItem to="/challenges">Задания</NavbarItem>
+      <NavbarItem v-if="user?.role === 1" to="/admin">Админ</NavbarItem>
 
-      <NavbarDropdownItem v-if="user" :items="dropdownItems"
-        >Иван</NavbarDropdownItem
-      >
+      <NavbarDropdownItem v-if="user" :items="dropdownItems">{{
+        user?.fio
+      }}</NavbarDropdownItem>
       <NavbarItem v-else to="/login">Войти</NavbarItem>
     </div>
   </nav>

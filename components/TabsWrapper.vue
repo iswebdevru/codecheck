@@ -19,14 +19,20 @@ provide("selectedTitle", selectedTitle);
     </button>
   </div>
   <div class="tabs__body">
-    <slot />
+    <slot class="tabs__top" name="top" />
+    <slot class="tabs__bottom" />
   </div>
 </template>
 
 <style scoped lang="scss">
 .tabs {
   border-bottom: 1px var(--color-border-primary) solid;
+  &__top {
+  }
   &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     margin-top: 2rem;
     padding: 0 1rem;
   }

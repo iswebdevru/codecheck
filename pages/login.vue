@@ -47,6 +47,7 @@ useHead({
         <FormButton type="submit" :background="'var(--color-primary)'"
           >Войти</FormButton
         >
+        <p class="form__error">{{ error }}</p>
       </form>
     </div>
   </div>
@@ -55,6 +56,9 @@ useHead({
 <style scoped lang="scss">
 .form {
   margin-top: 2rem;
+  &__error {
+    color: var(--color-danger);
+  }
   &__title {
     font-size: 1.5rem;
   }
@@ -74,6 +78,7 @@ useHead({
   &__item {
     display: flex;
     flex-direction: column;
+    width: 100%;
     // align-items: baseline;
   }
 }

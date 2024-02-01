@@ -16,7 +16,7 @@ export default eventHandler(async (event) => {
     !/^[a-z0-9_-]+$/.test(username)
   ) {
     throw createError({
-      message: "Invalid username",
+      message: "Некорректное имя пользователя",
       statusCode: 400,
     });
   }
@@ -27,7 +27,7 @@ export default eventHandler(async (event) => {
     password.length > 255
   ) {
     throw createError({
-      message: "Invalid password",
+      message: "Неправильный пароль",
       statusCode: 400,
     });
   }
@@ -45,7 +45,7 @@ export default eventHandler(async (event) => {
   // console.log(tokens);
   if (tokens.errorcode) {
     throw createError({
-      message: "Incorrect username or password",
+      message: "Неправильное имя пользователя или пароль",
       statusCode: 400,
     });
   }
@@ -66,7 +66,7 @@ export default eventHandler(async (event) => {
         email: userInfo[0].email,
         fio: userInfo[0].fullname,
         username: userInfo[0].username,
-        group: userInfo[0].city,
+        group: userInfo[0].city || "",
       },
     });
   } else {

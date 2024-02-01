@@ -38,34 +38,66 @@ const getCodemirrorStates = () => {
         </div>
         <div class="challenge__right right">
           <TabsWrapper>
-            <Tab title="Код"
-              ><codemirror
-                v-model="code"
-                placeholder="Здесь пишем код"
-                :style="{
-                  height: '300px',
-                  'font-size': '1rem',
-                }"
-                :autofocus="true"
-                :indent-with-tab="true"
-                :tab-size="2"
-                :extensions="extensions"
-                @ready="handleReady"
-                @change="console.log('change', $event)"
-                @focus="console.log('focus', $event)"
-                @blur="console.log('blur', $event)"
-              />
-              <div class="right__btns">
-                <FormButton
-                  background="var(--color-warning)"
-                  color="var(--color-text-primary)"
-                  class="right__btn"
-                  >Проверить</FormButton
-                >
-              </div>
-            </Tab>
-            <Tab title="Вывод"> asdf</Tab>
-            <Tab title="Тесты"> </Tab>
+            <template v-slot:top>
+              <LanguageSelect
+                @selectedLanguage="
+                  (n) => {
+                    console.log(n);
+                  }
+                "
+                class="challenge__languages"
+                :languages="['Python', 'Ruby']"
+              ></LanguageSelect>
+            </template>
+
+            <template v-slot:default>
+              <Tab title="Код"
+                ><codemirror
+                  v-model="code"
+                  placeholder="Здесь пишем код"
+                  :style="{
+                    height: '300px',
+                    'font-size': '1rem',
+                  }"
+                  :autofocus="true"
+                  :indent-with-tab="true"
+                  :tab-size="2"
+                  :extensions="extensions"
+                  @ready="handleReady"
+                  @change="console.log('change', $event)"
+                  @focus="console.log('focus', $event)"
+                  @blur="console.log('blur', $event)"
+                />
+                <div class="right__btns">
+                  <FormButton
+                    background="var(--color-warning)"
+                    color="var(--color-text-primary)"
+                    class="right__btn"
+                    >Проверить</FormButton
+                  >
+                </div>
+              </Tab>
+              <Tab title="Вывод"> asdf</Tab>
+              <Tab title="Тесты">
+                <codemirror
+                  v-model="code"
+                  placeholder="Здесь пишем код"
+                  :style="{
+                    height: '300px',
+                    'font-size': '1rem',
+                  }"
+                  :autofocus="true"
+                  disabled
+                  :indent-with-tab="true"
+                  :tab-size="2"
+                  :extensions="extensions"
+                  @ready="handleReady"
+                  @change="console.log('change', $event)"
+                  @focus="console.log('focus', $event)"
+                  @blur="console.log('blur', $event)"
+                />
+              </Tab>
+            </template>
           </TabsWrapper>
         </div>
       </div>
@@ -78,8 +110,13 @@ const getCodemirrorStates = () => {
 :deep(.cm-editor) {
   border-radius: 5px;
 }
+
 .challenge {
   margin-top: 2rem;
+  &__languages {
+    display: flex;
+    justify-content: flex-end;
+  }
   &__container {
     margin: 0 auto;
     max-width: var(--width-container);
@@ -111,19 +148,19 @@ const getCodemirrorStates = () => {
     max-width: 200px;
   }
 }
-.tabs {
-  border-bottom: 1px var(--color-text-link) solid;
+// .tabs {
+//   border-bottom: 1px var(--color-text-link) solid;
 
-  &__tab {
-    padding: 1rem 1.2rem;
-    font-size: 1.2rem;
-    margin-bottom: -1px;
-    border-bottom: 1px var(--color-text-link) solid;
-    &.tab_active {
-      color: var(--color-primary);
-      // background: rgba(128, 128, 128, 0.225);
-      border-bottom: 1px var(--color-primary) solid;
-    }
-  }
-}
+//   &__tab {
+//     padding: 1rem 1.2rem;
+//     font-size: 1.2rem;
+//     margin-bottom: -1px;
+//     border-bottom: 1px var(--color-text-link) solid;
+//     &.tab_active {
+//       color: var(--color-primary);
+//       // background: rgba(128, 128, 128, 0.225);
+//       border-bottom: 1px var(--color-primary) solid;
+//     }
+//   }
+// }
 </style>
