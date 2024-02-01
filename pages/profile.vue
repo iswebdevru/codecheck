@@ -1,6 +1,9 @@
 <script setup>
+useHead({
+  title: "Профиль",
+});
 definePageMeta({
-  middleware: "auth",
+  middleware: "protected",
 });
 </script>
 

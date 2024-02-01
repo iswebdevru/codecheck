@@ -1,11 +1,27 @@
 <script setup lang="ts">
-const { signIn, token, data, status, lastRefreshedAt } = useAuth();
+definePageMeta({
+  middleware: "onlyguest",
+});
 const username = ref("");
 const password = ref("");
-definePageMeta({
-  // unauthenticatedOnly: true,
-  // navigateAuthenticatedTo: '/'
-  middleware: "unauthenticated-only",
+const error = ref<string | null>(null);
+const submitForm = async () => {
+  const result = await useFetch("/api/auth/login", {
+    method: "POST",
+    body: {
+      username: username.value,
+      password: password.value,
+    },
+  });
+  if (result.error.value) {
+    error.value = result.error.value.data?.message ?? null;
+  } else {
+    await navigateTo("/");
+  }
+};
+
+useHead({
+  title: "Логин",
 });
 </script>
 
@@ -13,12 +29,7 @@ definePageMeta({
   <div class="form">
     <div class="form__container">
       <!-- {{ status }} -->
-      <form
-        @submit.prevent="
-          signIn({ username, password }, { callbackUrl: '/profile' })
-        "
-        class="form__body"
-      >
+      <form @submit.prevent="submitForm" class="form__body">
         <h1 class="form__title">Авторизация</h1>
         <div class="form__item">
           <LabelInput for="user">Логин</LabelInput>

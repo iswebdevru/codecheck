@@ -7,7 +7,7 @@ interface dropdownItem {
 interface Props {
   items: dropdownItem[];
 }
-const { signOut } = useAuth();
+
 const props = defineProps<Props>();
 const dropdown = ref();
 const open = ref(false);
@@ -21,7 +21,12 @@ const handleOpen = () => {
   open.value = !open.value;
 };
 
-onMounted(() => {});
+const logout = async () => {
+  await useFetch("/api/auth/logout", {
+    method: "POST",
+  });
+  navigateTo("/login");
+};
 </script>
 
 <template>
@@ -55,9 +60,7 @@ onMounted(() => {});
         class="dropdown__item"
         >{{ item.name }}</NuxtLink
       >
-      <button class="dropdown__item" @click="signOut({ callbackUrl: '/' })">
-        Выйти
-      </button>
+      <button class="dropdown__item" @click="logout">Выйти</button>
     </div>
   </div>
 </template>
