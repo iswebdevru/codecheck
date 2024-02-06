@@ -1,6 +1,11 @@
 <script setup lang="ts">
+type Lang = {
+  id: number;
+  name: string;
+};
+
 interface Props {
-  languages: string[];
+  languages: Lang[];
 }
 const props = defineProps<Props>();
 
@@ -9,7 +14,7 @@ const selectedLanguage = ref(props.languages[0]);
 // provide("selectedLanguage", selectedLanguage.value);
 const emit = defineEmits(["selectedLanguage"]);
 
-const selectLang = (item: string) => {
+const selectLang = (item: any) => {
   selectedLanguage.value = item;
   emit("selectedLanguage", selectedLanguage.value);
 };
@@ -23,8 +28,9 @@ const selectLang = (item: string) => {
         class="languages__item"
         :class="{ languages_active: selectedLanguage === item }"
         v-for="item in props.languages"
+        :key="item.id"
       >
-        {{ item }}
+        {{ item.name }}
       </button>
     </div>
   </div>
@@ -35,6 +41,7 @@ const selectLang = (item: string) => {
   &__list {
     list-style: none;
     display: flex;
+    gap: 0.2rem;
   }
   &__item {
     font-size: 0.8rem;

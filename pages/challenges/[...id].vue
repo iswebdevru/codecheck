@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { Codemirror } from "vue-codemirror";
 import { python } from "@codemirror/lang-python";
 // import { oneDark } from "@codemirror/theme-one-dark";
@@ -13,7 +13,7 @@ const extensions = [python(), darcula];
 
 // Codemirror EditorView instance ref
 const view = shallowRef();
-const handleReady = (payload) => {
+const handleReady = (payload: any) => {
   view.value = payload.view;
 };
 
@@ -21,7 +21,10 @@ const handleReady = (payload) => {
 const getCodemirrorStates = () => {
   const state = view.value.state;
   const ranges = state.selection.ranges;
-  const selected = ranges.reduce((r, range) => r + range.to - range.from, 0);
+  const selected = ranges.reduce(
+    (r: any, range: any) => r + range.to - range.from,
+    0
+  );
   const cursor = ranges[0].anchor;
   const length = state.doc.length;
   const lines = state.doc.lines;
@@ -152,19 +155,4 @@ const getCodemirrorStates = () => {
     max-width: 200px;
   }
 }
-// .tabs {
-//   border-bottom: 1px var(--color-text-link) solid;
-
-//   &__tab {
-//     padding: 1rem 1.2rem;
-//     font-size: 1.2rem;
-//     margin-bottom: -1px;
-//     border-bottom: 1px var(--color-text-link) solid;
-//     &.tab_active {
-//       color: var(--color-primary);
-//       // background: rgba(128, 128, 128, 0.225);
-//       border-bottom: 1px var(--color-primary) solid;
-//     }
-//   }
-// }
 </style>

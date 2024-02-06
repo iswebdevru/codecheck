@@ -35,19 +35,23 @@ model Tag {
 }
 
 model Challenge {
-  id          Int    @id @default(autoincrement())
+  id          Int                @id @default(autoincrement())
   name        String
   description String
   tags        Tag[]
+  variants    ChallengeVariant[]
 }
 
 model ChallengeVariant {
   id             Int        @id @default(autoincrement())
   mdInstructrion String
   test           String
+  code           String
   Solutions      Solution[]
   lang           Language   @relation(fields: [languageId], references: [id])
   languageId     Int
+  Challenge      Challenge? @relation(fields: [challengeId], references: [id])
+  challengeId    Int?
 }
 
 model Solution {
