@@ -20,7 +20,8 @@ provide("selectedTitle", selectedTitle);
   </div>
   <div class="tabs__body">
     <slot class="tabs__top" name="top" />
-    <slot class="tabs__bottom" />
+    <slot class="tabs__main" />
+    <slot class="tabs__bottom" name="bottom" />
   </div>
 </template>
 

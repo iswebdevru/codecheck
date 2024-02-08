@@ -50,6 +50,9 @@ const selectLang = (item: any) => {
     padding: 0.5rem;
     background: var(--color-bg-primary);
     color: var(--color-text-primary);
+    &:hover {
+      border: 1px solid var(--color-bg-secondary);
+    }
     &.languages_active {
       background: var(--color-bg-secondary);
       color: var(--color-text-secondary);

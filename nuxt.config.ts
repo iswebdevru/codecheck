@@ -4,6 +4,18 @@ export default defineNuxtConfig({
   // build: {
   //    transpile: ["jsonwebtoken"],
   // },
+
+  // nitro: {
+  //   storage: {
+  //     checks: {
+  //       driver: "fs",
+  //       base: "./checks",
+  //     },
+  //   },
+  // },
+  experimental: {
+    sharedPrerenderData: true,
+  },
   modules: ["@pinia/nuxt"],
   // auth: {
   //   provider: {

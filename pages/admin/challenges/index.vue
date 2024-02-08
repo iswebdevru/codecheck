@@ -61,7 +61,7 @@ definePageMeta({
 });
 
 const store = useChellengesStore();
-const { currentLang, langs } = storeToRefs(store);
+const { currentLang, langs, challenges } = storeToRefs(store);
 const { currentChallenge, initChallenges } = store;
 
 await initChallenges();
@@ -80,10 +80,10 @@ const codeExtensions = [
     },
   }),
   lineNumbers(),
-  // highlightActiveLineGutter(),
+  highlightActiveLineGutter(),
   highlightSpecialChars(),
   history(),
-  // foldGutter({}),
+  foldGutter({}),
   drawSelection(),
   dropCursor(),
   indentOnInput(),
@@ -94,7 +94,7 @@ const codeExtensions = [
   autocompletion(),
   rectangularSelection(),
   crosshairCursor(),
-  // highlightActiveLine(),
+  highlightActiveLine(),
   highlightSelectionMatches(),
   keymap.of([
     ...closeBracketsKeymap,
@@ -126,10 +126,10 @@ const testsExtensions = [
     },
   }),
   lineNumbers(),
-  // highlightActiveLineGutter(),
+  highlightActiveLineGutter(),
   highlightSpecialChars(),
   history(),
-  // foldGutter({}),
+  foldGutter({}),
   drawSelection(),
   dropCursor(),
   indentOnInput(),
@@ -139,7 +139,7 @@ const testsExtensions = [
   autocompletion(),
   rectangularSelection(),
   crosshairCursor(),
-  // highlightActiveLine(),
+  highlightActiveLine(),
   highlightSelectionMatches(),
   keymap.of([
     ...closeBracketsKeymap,
@@ -202,6 +202,30 @@ watch(
     renderedMd.value = parser.render(currentChallenge().mdInstructrion);
   }
 );
+
+const check = async () => {
+  switch (currentLang.value) {
+    case "Python":
+      const resCheck: any = await $fetch("/api/check", {
+        method: "POST",
+        body: {
+          lang: currentLang.value,
+          code: currentChallenge().code,
+          test: currentChallenge().test,
+        },
+      });
+      output.value = resCheck.stderr;
+      console.log(resCheck);
+      break;
+    case "Ruby":
+      console.log(currentLang.value, 1);
+      break;
+    case "PHP":
+      console.log(currentLang.value, 1);
+      break;
+  }
+  console.log(currentChallenge(), currentLang.value);
+};
 </script>
 
 <template>
@@ -242,6 +266,7 @@ watch(
                   :style="{
                     height: '300px',
                     'font-size': '1rem',
+                    'border-radius': 'var(--border-radius)',
                   }"
                   :autofocus="true"
                   :indent-with-tab="true"
@@ -252,14 +277,6 @@ watch(
                   @focus="console.log('focus', $event)"
                   @blur="console.log('blur', $event)"
                 />
-                <div class="right__btns">
-                  <FormButton
-                    background="var(--color-warning)"
-                    color="var(--color-text-primary)"
-                    class="right__btn"
-                    >Проверить</FormButton
-                  >
-                </div>
               </Tab>
               <Tab title="Вывод">
                 <codemirror
@@ -268,6 +285,7 @@ watch(
                   :style="{
                     height: '300px',
                     'font-size': '1rem',
+                    'border-radius': 'var(--border-radius)',
                   }"
                   :autofocus="true"
                   :indent-with-tab="true"
@@ -286,6 +304,7 @@ watch(
                   :style="{
                     height: '300px',
                     'font-size': '1rem',
+                    'border-radius': 'var(--border-radius)',
                   }"
                   :autofocus="true"
                   :indent-with-tab="true"
@@ -297,6 +316,17 @@ watch(
                   @blur="console.log('blur', $event)"
                 />
               </Tab>
+            </template>
+            <template v-slot:bottom>
+              <div class="right__btns">
+                <FormButton
+                  @click="check()"
+                  background="var(--color-warning)"
+                  color="var(--color-text-primary)"
+                  class="right__btn"
+                  >Проверить</FormButton
+                >
+              </div>
             </template>
           </TabsWrapper>
         </div>
