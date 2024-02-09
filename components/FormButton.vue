@@ -2,11 +2,13 @@
 interface Props {
   background?: string;
   color?: string;
+  loading?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   background: "var(--color-primary)",
   color: "var(--color-text-secondary)",
+  loading: true,
 });
 </script>
 
@@ -15,7 +17,8 @@ const props = withDefaults(defineProps<Props>(), {
     :style="`background: ${props.background}; color: ${props.color}`"
     class="button"
   >
-    <slot />
+    <slot v-if="props.loading" />
+    <span v-else class="loader"></span>
   </button>
 </template>
 
@@ -28,5 +31,28 @@ const props = withDefaults(defineProps<Props>(), {
   width: 100%;
   // background: var(--color-primary);
   color: var(--color-text-secondary);
+}
+
+.loader {
+  width: 1rem;
+  height: 1rem;
+  border-width: 5px;
+  border-style: solid;
+
+  // border: 5px solid black;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

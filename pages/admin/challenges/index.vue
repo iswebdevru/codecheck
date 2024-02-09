@@ -28,6 +28,7 @@ import {
   crosshairCursor,
   highlightActiveLine,
   keymap,
+  EditorView,
 } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
 import {
@@ -109,6 +110,8 @@ const codeExtensions = [
 
 const output = ref(`asdfdf`);
 const outputExtensions = [
+  EditorView.lineWrapping,
+
   darculaInit({
     settings: {
       // fontFamily: "Consolas",
@@ -203,9 +206,32 @@ watch(
   }
 );
 
+currentChallenge().test = `import unittest
+
+from solution_code import *
+
+class TestMethods(unittest.TestCase):
+
+    def test_function(self):
+        self.assertEqual(addition(1), 2)
+        self.assertEqual(addition(0), 1)
+        self.assertEqual(addition(99), 100)
+        self.assertEqual(addition(10), 11)
+
+if __name__ == "__main__":
+    unittest.main()`;
+
+output.value = `Это - вывод. Нажмите кнопку "Проверить код", и здесь появятся резултаты тестов. Сами тесты находятся во вкладке "Тесты".
+`;
+
+currentChallenge().code = `def addition(n):
+  return n + 1`;
+
+const btnLoading = ref(true);
 const check = async () => {
   switch (currentLang.value) {
     case "Python":
+      btnLoading.value = false;
       const resCheck: any = await $fetch("/api/check", {
         method: "POST",
         body: {
@@ -215,6 +241,7 @@ const check = async () => {
         },
       });
       output.value = resCheck.stderr;
+      btnLoading.value = true;
       console.log(resCheck);
       break;
     case "Ruby":
@@ -284,7 +311,7 @@ const check = async () => {
                   placeholder="Здесь пишем тесты"
                   :style="{
                     height: '300px',
-                    'font-size': '1rem',
+                    'font-size': '14px',
                     'border-radius': 'var(--border-radius)',
                   }"
                   :autofocus="true"
@@ -324,6 +351,7 @@ const check = async () => {
                   background="var(--color-warning)"
                   color="var(--color-text-primary)"
                   class="right__btn"
+                  :loading="btnLoading"
                   >Проверить</FormButton
                 >
               </div>

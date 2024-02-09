@@ -56,14 +56,6 @@ export default defineEventHandler(async (event) => {
     }
     return result;
   };
-  //   await getSubmission(submission.token);
-  //   const result = await $fetch(
-  //     `http://localhost:2358/submissions/${submission.token}`,
-  //     {
-  //       retry: 3,
-  //       retryDelay: 1000,
-  //     }
-  //   );
   const result = await getSubmission(submission.token);
   await storage.clear();
 
