@@ -17,20 +17,15 @@ const handleReady = (payload: any) => {
   view.value = payload.view;
 };
 
-// Status is available at all times via Codemirror EditorView
-const getCodemirrorStates = () => {
-  const state = view.value.state;
-  const ranges = state.selection.ranges;
-  const selected = ranges.reduce(
-    (r: any, range: any) => r + range.to - range.from,
-    0
-  );
-  const cursor = ranges[0].anchor;
-  const length = state.doc.length;
-  const lines = state.doc.lines;
-  // more state info ...
-  // return ...
-};
+const route = useRoute();
+
+const { data: challenge } = await useFetch(
+  `/api/challenges/${route.params.id}`
+);
+let langs: any = [];
+challenge.value.variants.forEach((item: any) => {
+  langs.push(item.lang);
+});
 </script>
 
 <template>
@@ -38,13 +33,13 @@ const getCodemirrorStates = () => {
     <div class="challenge__container">
       <div class="challenge__body">
         <div class="challenge__left left">
-          <TabsWrapper>
+          <TabsWrapper name="tabsChallengeLeft">
             <Tab title="Инструкция"> Инструкция </Tab>
             <Tab title="Решение"> Решение </Tab>
           </TabsWrapper>
         </div>
         <div class="challenge__right right">
-          <TabsWrapper>
+          <TabsWrapper name="tabsChallengeRight">
             <template v-slot:top>
               <LanguageSelect
                 @selectedLanguage="
@@ -53,7 +48,7 @@ const getCodemirrorStates = () => {
                   }
                 "
                 class="challenge__languages"
-                :languages="['Python', 'Ruby']"
+                :languages="langs"
               ></LanguageSelect>
             </template>
 

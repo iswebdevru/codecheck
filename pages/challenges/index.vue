@@ -2,32 +2,8 @@
 useHead({
   title: "Задания",
 });
-const challenges = [
-  {
-    id: 1,
-    title: "«Привет, Мир!» Как работает CodeChick",
-    description:
-      "Это вводное задание, благодаря которому вы поймете, как работает CodeChick.",
-    tags: [
-      {
-        id: 1,
-        name: "Легко",
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "«Привет, Мир!» Как работает CodeChick",
-    description:
-      "Это вводное задание, благодаря которому вы поймете, как работает CodeChick.",
-    tags: [
-      {
-        id: 1,
-        name: "Легко",
-      },
-    ],
-  },
-];
+const { data: challenges } = await useFetch("/api/challenges");
+console.log(challenges.value);
 </script>
 
 <template>
@@ -45,7 +21,7 @@ const challenges = [
             class="challenges__item item"
           >
             <NuxtLink :to="`/challenges/${item.id}`" class="item__title">{{
-              item.title
+              item.name
             }}</NuxtLink>
             <p class="item__description">{{ item.description }}</p>
             <div v-if="item.tags" class="item__tags">
@@ -106,6 +82,8 @@ const challenges = [
     border-radius: 0.3rem;
   }
   &__tags {
+    display: flex;
+    gap: 0.5rem;
     margin-top: 1rem;
   }
 }

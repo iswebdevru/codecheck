@@ -16,7 +16,7 @@
 
   top: 0;
   left: 0;
-  z-index: 50;
+  z-index: 1002;
   background: var(--color-bg-primary);
   &__container {
     margin: 0 auto;

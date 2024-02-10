@@ -44,9 +44,9 @@ model Challenge {
 
 model ChallengeVariant {
   id             Int        @id @default(autoincrement())
-  mdInstructrion String
-  test           String
-  code           String
+  mdInstructrion String     @db.Text
+  test           String     @db.Text
+  code           String     @db.Text
   Solutions      Solution[]
   lang           Language   @relation(fields: [languageId], references: [id])
   languageId     Int

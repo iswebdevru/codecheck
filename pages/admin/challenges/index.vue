@@ -218,7 +218,7 @@ currentChallenge().code = `def addition(n):
 
 const btnLoading = ref(true);
 
-const { progress, isLoading, start, finish, clear } = useLoadingIndicator();
+const { start, finish } = useLoadingIndicator();
 
 const check = async () => {
   start();
@@ -245,6 +245,21 @@ const challengeDescription = ref("");
 
 const { data: tags } = useFetch("/api/tags");
 const selectedTags = ref();
+
+const addChallenge = async () => {
+  const data = await $fetch("/api/challenges", {
+    method: "POST",
+    body: {
+      name: challengeName.value,
+      description: challengeDescription.value,
+      tags: selectedTags.value,
+      variants: Array.from(challenges.value, ([name, value]) => ({
+        name,
+        value,
+      })),
+    },
+  });
+};
 </script>
 
 <template>
@@ -261,6 +276,7 @@ const selectedTags = ref();
                 placeholder="Название задания"
               ></TextInput>
               <MultiSelect
+                empty-message="Теги не найдены"
                 selected-items-label="{0} тэгов выбрано"
                 v-model="selectedTags"
                 :options="tags"
@@ -368,7 +384,7 @@ const selectedTags = ref();
                   >Проверить код</FormButton
                 >
                 <FormButton
-                  @click="check()"
+                  @click="addChallenge"
                   background="var(--color-success)"
                   color="var(--color-text-priamary)"
                   class="right__btn"

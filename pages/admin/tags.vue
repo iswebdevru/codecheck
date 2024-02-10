@@ -2,7 +2,7 @@
 useHead({
   title: "Добавление тэга",
 });
-const tag = ref();
+const tag = ref("");
 const storeTag = () => {
   const data = $fetch("/api/tags", {
     method: "POST",
@@ -10,15 +10,20 @@ const storeTag = () => {
       name: tag.value,
     },
   });
-  console.log(data);
 };
 </script>
 
 <template>
   <div class="tags">
     <div class="tags__container">
+      <h1 class="tags__title">Добавление тэга</h1>
       <form @submit.prevent="storeTag" class="tags__form">
-        <TextInput v-model="tag" id="tag" name="tag"></TextInput>
+        <TextInput
+          placeholder="Название тэга"
+          v-model="tag"
+          id="tag"
+          name="tag"
+        ></TextInput>
         <FormButton>Добавить тэг</FormButton>
       </form>
     </div>

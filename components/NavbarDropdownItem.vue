@@ -93,6 +93,8 @@ const logout = async () => {
     cursor: pointer;
     &[aria-expanded="true"] .dropdown {
       display: flex;
+      opacity: 1;
+      visibility: visible;
     }
   }
   &__icon {
@@ -103,7 +105,9 @@ const logout = async () => {
 .dropdown {
   position: absolute;
   background: white;
-  display: none;
+  // display: none;
+  opacity: 0;
+  visibility: hidden;
   flex-direction: column;
   // align-items: flex-start;
   top: 100%;
@@ -111,6 +115,7 @@ const logout = async () => {
   left: auto;
   min-width: fit-content;
   overflow: hidden;
+  transition: all 0.3s ease 0s;
   &__item {
     white-space: nowrap;
     padding: 0.5rem;
