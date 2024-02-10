@@ -38,8 +38,8 @@ import {
 } from "@codemirror/autocomplete";
 import { lintKeymap } from "@codemirror/lint";
 
-const nuxtApp = useNuxtApp();
-nuxtApp.vueApp.use(install, { extensions: [] });
+// const nuxtApp = useNuxtApp();
+// nuxtApp.vueApp.use(install, { extensions: [] });
 // app.use(install, { extensions: [] });
 
 useHead({
@@ -50,7 +50,7 @@ definePageMeta({
   middleware: "admin",
 });
 
-const store = useChellengesStore();
+const store = useAdminChellengeVariantsStore();
 const { currentLang, langs, challenges } = storeToRefs(store);
 const { currentChallenge, initChallenges } = store;
 
@@ -97,7 +97,10 @@ const codeExtensions = [
   ]),
 ];
 
-const output = ref(`asdfdf`);
+const output = ref(
+  `Это - вывод. Нажмите кнопку "Проверить код", и здесь появятся резултаты тестов. Сами тесты находятся во вкладке "Тесты`
+);
+
 const outputExtensions = [
   EditorView.lineWrapping,
 
@@ -209,9 +212,6 @@ class TestMethods(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()`;
-
-output.value = `Это - вывод. Нажмите кнопку "Проверить код", и здесь появятся резултаты тестов. Сами тесты находятся во вкладке "Тесты".
-`;
 
 currentChallenge().code = `def addition(n):
   return n + 1`;
@@ -336,7 +336,6 @@ const addChallenge = async () => {
               <Tab title="Вывод">
                 <codemirror
                   v-model="output"
-                  placeholder="Здесь пишем тесты"
                   :style="{
                     height: '300px',
                     'font-size': '14px',

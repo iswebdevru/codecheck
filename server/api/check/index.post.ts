@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
     .toString("base64");
 
   const submission: any = await $fetch(
-    "http://localhost:2358/submissions?base64_encoded=true",
+    "http://localhost:2358/submissions?wait=true",
     {
       method: "POST",
       body: {
@@ -47,17 +47,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   );
-  const getSubmission = async (token: string) => {
-    let result: any = await $fetch(
-      `http://localhost:2358/submissions/${token}`
-    );
-    while (result.status.id === 1) {
-      result = await $fetch(`http://localhost:2358/submissions/${token}`);
-    }
-    return result;
-  };
-  const result = await getSubmission(submission.token);
   await storage.clear();
 
-  return result;
+  return submission;
 });
