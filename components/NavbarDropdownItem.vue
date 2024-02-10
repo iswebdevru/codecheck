@@ -25,7 +25,10 @@ const logout = async () => {
   await useFetch("/api/auth/logout", {
     method: "POST",
   });
-  navigateTo("/login");
+  const user = useUser();
+  user.value = null;
+  // console.log(user.value, userAuth.value);
+  await navigateTo("/login");
 };
 </script>
 

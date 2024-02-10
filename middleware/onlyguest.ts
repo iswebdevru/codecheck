@@ -6,5 +6,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // user.value = await $fetch("/api/auth/user");
 
   // console.log(user.value);
-  if (user.value) return navigateTo("/profile");
+  if (user.value?.id) return navigateTo("/profile");
 });

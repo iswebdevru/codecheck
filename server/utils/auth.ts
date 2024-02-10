@@ -21,6 +21,7 @@ export const lucia = new Lucia(adapter, {
       fio: attributes.fio,
       email: attributes.email,
       role: attributes.role,
+      group: attributes.group,
     };
   },
 });
@@ -39,4 +40,5 @@ export interface DatabaseUser {
   email: string;
   fio: string;
   role: number;
+  group: string;
 }

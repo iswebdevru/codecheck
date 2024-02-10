@@ -29,5 +29,8 @@ const emits = defineEmits(["update:modelValue"]);
   resize: vertical;
   border-radius: var(--border-radius);
   border: 1px solid var(--color-border-primary);
+  &:focus {
+    outline: 1px solid var(--color-primary);
+  }
 }
 </style>

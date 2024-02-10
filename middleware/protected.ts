@@ -1,6 +1,3 @@
-import { callWithNuxt } from "#app/nuxt";
-import { useNuxtApp } from "#imports";
-
 export default defineNuxtRouteMiddleware(async (to, from) => {
   // const nuxtApp = useNuxtApp();
   // const user = useUser();

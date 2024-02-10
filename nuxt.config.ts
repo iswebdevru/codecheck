@@ -14,9 +14,16 @@ export default defineNuxtConfig({
   //   },
   // },
   experimental: {
-    sharedPrerenderData: true,
+    // sharedPrerenderData: true,
   },
-  modules: ["@pinia/nuxt"],
+
+  modules: ["@pinia/nuxt", "nuxt-primevue"],
+  primevue: {
+    options: {},
+    components: {
+      include: ["MultiSelect"],
+    },
+  },
   // auth: {
   //   provider: {
   //     type: "local",

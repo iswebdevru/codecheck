@@ -28,5 +28,8 @@ const emits = defineEmits(["update:modelValue"]);
   border: 1px solid var(--color-border-primary);
   width: 100%;
   display: flex;
+  &:focus {
+    outline: 1px solid var(--color-primary);
+  }
 }
 </style>

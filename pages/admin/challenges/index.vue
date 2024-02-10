@@ -1,23 +1,12 @@
 <script setup lang="ts">
 import { Codemirror, install } from "vue-codemirror";
 import { python } from "@codemirror/lang-python";
-
-// import {
-//   gutter,
-//   lineNumbers,
-//   lineNumberMarkers,
-//   gutters,
-//   GutterMarker,
-// } from "@codemirror/";
-
 import { basicSetup } from "codemirror";
 import { darcula, darculaInit } from "@uiw/codemirror-theme-darcula";
-
 import "@/assets/css/markdown.scss";
 import hljs from "highlight.js";
 import "highlight.js/styles/base16/github.css";
 import Markdown from "markdown-it";
-
 import {
   lineNumbers,
   highlightActiveLineGutter,
@@ -229,30 +218,33 @@ currentChallenge().code = `def addition(n):
 
 const btnLoading = ref(true);
 const check = async () => {
-  switch (currentLang.value) {
-    case "Python":
-      btnLoading.value = false;
-      const resCheck: any = await $fetch("/api/check", {
-        method: "POST",
-        body: {
-          lang: currentLang.value,
-          code: currentChallenge().code,
-          test: currentChallenge().test,
-        },
-      });
-      output.value = resCheck.stderr;
-      btnLoading.value = true;
-      console.log(resCheck);
-      break;
-    case "Ruby":
-      console.log(currentLang.value, 1);
-      break;
-    case "PHP":
-      console.log(currentLang.value, 1);
-      break;
-  }
-  console.log(currentChallenge(), currentLang.value);
+  btnLoading.value = false;
+  const resCheck: any = await $fetch("/api/check", {
+    method: "POST",
+    body: {
+      lang: currentLang.value,
+      code: currentChallenge().code,
+      test: currentChallenge().test,
+    },
+  });
+  output.value = resCheck.stderr;
+  btnLoading.value = true;
+  console.log(resCheck);
 };
+
+const challengeName = ref("");
+const challengeDescription = ref("");
+
+const options = [
+  { name: "asdfs" },
+  { name: "fffffffff" },
+  { name: "ffffffffd" },
+  { name: "fffffffaf" },
+  { name: "fffffffff" },
+  { name: "fffffffsf" },
+  { name: "ffffffgff" },
+];
+const value = ref();
 </script>
 
 <template>
@@ -261,12 +253,32 @@ const check = async () => {
       <div class="challenge__body">
         <div class="challenge__left left">
           <TabsWrapper>
-            <Tab title="Инструкция">
+            <Tab class="challenge__instruction" title="Инструкция">
+              <TextInput
+                v-model="challengeName"
+                name="challengeName"
+                id="challengeName"
+                placeholder="Название задания"
+              ></TextInput>
+              <MultiSelect
+                selected-items-label="{0} тэгов выбрано"
+                v-model="value"
+                :options="options"
+                optionLabel="name"
+                placeholder="Выбрать тэги"
+                :maxSelectedLabels="3"
+              />
+              <AppTextarea
+                placeholder="Описание задания"
+                v-model="challengeDescription"
+                name="challengeDescription"
+                id="challengeDescription"
+              ></AppTextarea>
               <client-only>
                 <AppTextarea
                   id="md"
                   v-model="currentChallenge().mdInstructrion"
-                  placeholder="Markdown"
+                  placeholder="Инструкция по выполнению задания (Markdown)"
                   name="md"
                 ></AppTextarea>
                 <div v-html="renderedMd" class="markdown-body"></div>
@@ -318,6 +330,7 @@ const check = async () => {
                   :indent-with-tab="true"
                   :tab-size="2"
                   :extensions="outputExtensions"
+                  disabled
                   @ready="handleReady"
                   @change="console.log('change', $event)"
                   @focus="console.log('focus', $event)"
@@ -352,7 +365,14 @@ const check = async () => {
                   color="var(--color-text-primary)"
                   class="right__btn"
                   :loading="btnLoading"
-                  >Проверить</FormButton
+                  >Проверить код</FormButton
+                >
+                <FormButton
+                  @click="check()"
+                  background="var(--color-success)"
+                  color="var(--color-text-priamary)"
+                  class="right__btn"
+                  >Добавить задачу</FormButton
                 >
               </div>
             </template>
@@ -367,12 +387,76 @@ const check = async () => {
 <style lang="scss">
 // @use "@/assets/css/markdown" as *;
 
+.p-multiselect {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.375rem 0.75rem;
+  border-color: var(--color-border-primary);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+.p-multiselect-panel {
+  background: var(--color-bg-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-color: var(--color-border-primary);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--border-radius);
+  border-top: none;
+
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.p-multiselect-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  max-height: 100px;
+  overflow: auto;
+}
+
+.p-multiselect-item {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  background: var(--color-bg-third);
+  border-radius: var(--border-radius);
+  padding: 0.375rem 0.75rem;
+}
+
+.p-multiselect-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.375rem 0.75rem;
+}
+
+.p-checkbox {
+  display: flex;
+  gap: 5px;
+}
+
+.p-checkbox-box {
+  display: none;
+}
+
 :deep(.cm-editor) {
   border-radius: 5px;
 }
 
 .challenge {
   margin-top: 2rem;
+  &__instruction {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
   &__languages {
     display: flex;
     justify-content: flex-end;
@@ -401,6 +485,7 @@ const check = async () => {
   }
   &__btns {
     display: flex;
+    gap: 1rem;
     justify-content: flex-end;
     margin-top: 1rem;
   }

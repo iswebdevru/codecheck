@@ -12,7 +12,8 @@
   "devDependencies": {
     "@types/markdown-it": "^13.0.7",
     "autoprefixer": "^10.4.17",
-    "nuxt": "^3.10.1",
+    "nuxt": "3.10.1",
+    "nuxt-primevue": "^0.3.0",
     "postcss": "^8.4.33",
     "prisma": "^5.9.0",
     "vue": "^3.4.14",
@@ -35,6 +36,7 @@
     "markdown-it": "^14.0.0",
     "oslo": "^1.0.3",
     "pinia": "^2.1.7",
+    "primevue": "^3.48.1",
     "sass": "^1.70.0",
     "vue-codemirror": "^6.1.1",
     "zip-lib": "^0.7.3"

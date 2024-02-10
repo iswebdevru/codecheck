@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const user = useUser();
+
 const dropdownItems = [
   {
     to: "/profile",

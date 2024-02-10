@@ -1,6 +1,7 @@
 <script setup lang="ts">
 interface Props {
   title: string;
+  selectedTitle?: string;
 }
 const props = defineProps<Props>();
 

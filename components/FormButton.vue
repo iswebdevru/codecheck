@@ -31,14 +31,16 @@ const props = withDefaults(defineProps<Props>(), {
   width: 100%;
   // background: var(--color-primary);
   color: var(--color-text-secondary);
+  // position: relative;
+  height: 2rem;
 }
 
 .loader {
   width: 1rem;
   height: 1rem;
-  border-width: 5px;
+  border-width: 2px;
   border-style: solid;
-
+  // position: absolute;
   // border: 5px solid black;
   border-bottom-color: transparent;
   border-radius: 50%;

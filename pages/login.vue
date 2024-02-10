@@ -5,7 +5,11 @@ definePageMeta({
 const username = ref("");
 const password = ref("");
 const error = ref<string | null>(null);
+const btnLoading = ref(true);
+const { progress, isLoading, start, finish, clear } = useLoadingIndicator();
 const submitForm = async () => {
+  btnLoading.value = false;
+  start();
   const result = await useFetch("/api/auth/login", {
     method: "POST",
     body: {
@@ -13,11 +17,14 @@ const submitForm = async () => {
       password: password.value,
     },
   });
+
   if (result.error.value) {
     error.value = result.error.value.data?.message ?? null;
   } else {
     await navigateTo("/");
   }
+  btnLoading.value = true;
+  finish();
 };
 
 useHead({
@@ -44,7 +51,10 @@ useHead({
             v-model="password"
           ></TextInput>
         </div>
-        <FormButton type="submit" :background="'var(--color-primary)'"
+        <FormButton
+          :loading="btnLoading"
+          type="submit"
+          :background="'var(--color-primary)'"
           >Войти</FormButton
         >
         <p class="form__error">{{ error }}</p>

@@ -15,6 +15,7 @@ const user = useUser();
       <h1 class="profile__name">{{ user?.fio }}</h1>
       <h2 class="profile__username">{{ user?.username }}</h2>
       <span class="profile__email">{{ user?.email }}</span>
+      <span class="profile__group">{{ user?.group }}</span>
     </div>
   </div>
 </template>
@@ -26,6 +27,8 @@ const user = useUser();
     max-width: var(--width-container);
     padding-right: 1rem;
     padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
   }
 }
 </style>

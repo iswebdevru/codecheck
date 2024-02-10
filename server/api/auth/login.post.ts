@@ -77,7 +77,7 @@ export default eventHandler(async (event) => {
       data: {
         email: userInfo[0].email,
         fio: userInfo[0].fullname,
-        group: userInfo[0].city,
+        group: userInfo[0].city || "",
       },
     });
   }
