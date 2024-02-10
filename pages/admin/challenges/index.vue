@@ -217,7 +217,11 @@ currentChallenge().code = `def addition(n):
   return n + 1`;
 
 const btnLoading = ref(true);
+
+const { progress, isLoading, start, finish, clear } = useLoadingIndicator();
+
 const check = async () => {
+  start();
   btnLoading.value = false;
   const resCheck: any = await $fetch("/api/check", {
     method: "POST",
@@ -227,24 +231,20 @@ const check = async () => {
       test: currentChallenge().test,
     },
   });
+  useState("rightTabs").value = "Вывод";
+  finish();
   output.value = resCheck.stderr;
   btnLoading.value = true;
-  console.log(resCheck);
+
+  // selectedTab.value = "Вывод";
+  // console.log(resCheck);
 };
 
 const challengeName = ref("");
 const challengeDescription = ref("");
 
-const options = [
-  { name: "asdfs" },
-  { name: "fffffffff" },
-  { name: "ffffffffd" },
-  { name: "fffffffaf" },
-  { name: "fffffffff" },
-  { name: "fffffffsf" },
-  { name: "ffffffgff" },
-];
-const value = ref();
+const { data: tags } = useFetch("/api/tags");
+const selectedTags = ref();
 </script>
 
 <template>
@@ -252,7 +252,7 @@ const value = ref();
     <div class="challenge__container">
       <div class="challenge__body">
         <div class="challenge__left left">
-          <TabsWrapper>
+          <TabsWrapper name="leftTabs">
             <Tab class="challenge__instruction" title="Инструкция">
               <TextInput
                 v-model="challengeName"
@@ -262,11 +262,11 @@ const value = ref();
               ></TextInput>
               <MultiSelect
                 selected-items-label="{0} тэгов выбрано"
-                v-model="value"
-                :options="options"
+                v-model="selectedTags"
+                :options="tags"
                 optionLabel="name"
                 placeholder="Выбрать тэги"
-                :maxSelectedLabels="3"
+                :maxSelectedLabels="5"
               />
               <AppTextarea
                 placeholder="Описание задания"
@@ -288,7 +288,7 @@ const value = ref();
           </TabsWrapper>
         </div>
         <div class="challenge__right right">
-          <TabsWrapper>
+          <TabsWrapper name="rightTabs">
             <template v-slot:top>
               <LanguageSelect
                 @selectedLanguage="selecting"
@@ -396,6 +396,10 @@ const value = ref();
   border-style: solid;
   border-radius: var(--border-radius);
   cursor: pointer;
+
+  &.p-focus {
+    outline: 1px solid var(--color-primary);
+  }
 }
 .p-multiselect-panel {
   background: var(--color-bg-primary);
@@ -407,10 +411,6 @@ const value = ref();
   border-width: 1px;
   border-style: solid;
   border-radius: var(--border-radius);
-  border-top: none;
-
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
 }
 
 .p-multiselect-items {

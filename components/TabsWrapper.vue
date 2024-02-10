@@ -1,7 +1,13 @@
 <script setup lang="ts">
+interface Props {
+  name: string;
+}
+const props = defineProps<Props>();
+
 const slots: any = useSlots();
 const tabTitles = ref(slots.default().map((tab: any) => tab.props.title));
-const selectedTitle = ref(tabTitles.value[0]);
+// const selectedTitle = ;
+const selectedTitle = useState(props.name, () => tabTitles.value[0]);
 
 provide("selectedTitle", selectedTitle);
 </script>
