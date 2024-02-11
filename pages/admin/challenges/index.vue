@@ -233,7 +233,7 @@ const check = async () => {
   });
   useState("rightTabs").value = "Вывод";
   finish();
-  output.value = resCheck.stderr;
+  output.value = resCheck.stdout;
   btnLoading.value = true;
 
   // selectedTab.value = "Вывод";

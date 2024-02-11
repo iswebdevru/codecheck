@@ -13,10 +13,10 @@ definePageMeta({
       <h1 class="admin__title">Панель управления</h1>
       <nav class="admin__nav">
         <NuxtLink class="admin__nav-item" to="/admin/challenges"
-          >Управление заданиями</NuxtLink
+          >Добавить задание</NuxtLink
         >
         <NuxtLink class="admin__nav-item" to="/admin/tags"
-          >Управление тэги</NuxtLink
+          >Добавить тэги</NuxtLink
         >
       </nav>
     </div>

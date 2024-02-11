@@ -27,7 +27,9 @@
   margin: 0;
   box-sizing: border-box;
 }
-
+html {
+  height: 100%;
+}
 body {
   font-family: Rubik;
   background: var(--color-bg-primary);

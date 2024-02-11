@@ -159,7 +159,7 @@ const check = async () => {
       test: currentChallenge().test,
     },
   });
-  output.value = resCheck.stderr;
+  output.value = resCheck.stdout;
   console.log(resCheck.stderr);
   useState("tabsChallengeRight").value = "Вывод";
   finish();
@@ -340,6 +340,7 @@ const parser = new Markdown({
     gap: 0.5rem;
     margin-top: 1rem;
     justify-content: flex-end;
+    flex-wrap: wrap;
   }
 }
 .right {
