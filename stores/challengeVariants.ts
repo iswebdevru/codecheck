@@ -28,6 +28,7 @@ export const useChellengeVariantsStore = defineStore(
           mdInstructrion: item.mdInstructrion,
           test: item.test,
           code: item.code,
+          id: item.id,
         };
       });
       langs.value = langss;

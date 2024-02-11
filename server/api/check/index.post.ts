@@ -4,6 +4,7 @@ import zlib from "zip-lib";
 import fs from "fs";
 
 export default defineEventHandler(async (event) => {
+  if (!event.context.user) return;
   const storage = createStorage({
     driver: fsDriver({ base: `./tmp/${event.context.user?.username}` }),
   });
@@ -38,7 +39,7 @@ export default defineEventHandler(async (event) => {
     .toString("base64");
 
   const submission: any = await $fetch(
-    "http://localhost:2358/submissions?wait=true",
+    `${process.env.JUDGE0}/submissions?wait=true`,
     {
       method: "POST",
       body: {

@@ -24,10 +24,23 @@ console.log(challenges.value);
               item.name
             }}</NuxtLink>
             <p class="item__description">{{ item.description }}</p>
-            <div v-if="item.tags" class="item__tags">
-              <span v-for="tag in item.tags" :key="tag.id" class="item__tag">{{
-                tag.name
-              }}</span>
+            <div class="item__bottom">
+              <div v-if="item.tags" class="item__tags">
+                <span
+                  v-for="tag in item.tags"
+                  :key="tag.id"
+                  class="item__tag"
+                  >{{ tag.name }}</span
+                >
+              </div>
+              <div class="item__langs">
+                <img
+                  class="item__lang-img"
+                  v-for="lang in item.variants"
+                  :src="`/langs/${lang.lang.name?.toLowerCase()}.svg`"
+                  alt=""
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -66,6 +79,20 @@ console.log(challenges.value);
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.086);
+  &__bottom {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__langs {
+    display: flex;
+    gap: 0.5rem;
+  }
+  &__lang-img {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
   &__title {
     color: black;
     font-size: 2rem;
@@ -84,7 +111,6 @@ console.log(challenges.value);
   &__tags {
     display: flex;
     gap: 0.5rem;
-    margin-top: 1rem;
   }
 }
 </style>

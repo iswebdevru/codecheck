@@ -148,6 +148,11 @@ const btnLoading = ref(true);
 
 const { start, finish } = useLoadingIndicator();
 
+const checkStatus = ref<boolean | null>(null);
+const btnCheckClicked = ref(false);
+
+const user = useUser();
+
 const check = async () => {
   start();
   btnLoading.value = false;
@@ -159,8 +164,23 @@ const check = async () => {
       test: currentChallenge().test,
     },
   });
+  resCheck.status.id === 3
+    ? (checkStatus.value = true)
+    : (checkStatus.value = false);
+  btnCheckClicked.value = true;
   output.value = resCheck.stdout;
-  console.log(resCheck.stderr);
+
+  if (checkStatus.value) {
+    // console.log(currentChallenge());
+    await $fetch(`/api/solutions/${user.value?.username}`, {
+      method: "POST",
+      body: {
+        code: currentChallenge().code,
+        variantId: currentChallenge().id,
+      },
+    });
+  }
+
   useState("tabsChallengeRight").value = "Вывод";
   finish();
   btnLoading.value = true;
@@ -181,6 +201,11 @@ const parser = new Markdown({
     return ""; // use external default escaping
   },
 });
+
+const { data: solutions } = await useFetch(
+  `/api/solutions/all/${currentChallenge().id}`
+);
+console.log(solutions.value, "ffffff");
 </script>
 
 <template>
@@ -204,7 +229,46 @@ const parser = new Markdown({
                 class="markdown-body"
               ></div>
             </Tab>
-            <Tab title="Решение"> Решение </Tab>
+            <Tab title="Решение">
+              <div v-if="!user" class="unauthorized">
+                <span class="unauthorized__msg"
+                  >Для просмотра решений необходимо
+                  <NuxtLink to="/login"><u>авторизоваться</u></NuxtLink>
+                </span>
+              </div>
+              <div v-if="user" class="left__solutions">
+                <div
+                  v-for="solution in solutions"
+                  :key="solution.id"
+                  class="solution"
+                >
+                  <div class="solution__body">
+                    <h3>{{ solution.user.fio }}</h3>
+                    <div class="solution__bottom">
+                      <span>{{
+                        new Date(solution.createdAt).toLocaleString()
+                      }}</span>
+                      <span>{{ solution.user?.group }}</span>
+                    </div>
+                  </div>
+
+                  <codemirror
+                    v-model="solution.code"
+                    placeholder="Здесь пишем код"
+                    :style="{
+                      height: '300px',
+                      'font-size': '1rem',
+                      'border-radius': 'var(--border-radius)',
+                    }"
+                    disabled
+                    :autofocus="true"
+                    :indent-with-tab="true"
+                    :tab-size="2"
+                    :extensions="codeExtensions"
+                  />
+                </div>
+              </div>
+            </Tab>
           </TabsWrapper>
         </div>
         <div class="challenge__right right">
@@ -281,6 +345,24 @@ const parser = new Markdown({
               </Tab>
             </template>
             <template v-slot:bottom>
+              <div v-if="!user" class="unauthorized">
+                <span class="unauthorized__msg"
+                  >Для запуска тестов необходима
+                  <NuxtLink to="/login"><u>авторизоваться</u></NuxtLink>
+                </span>
+              </div>
+              <div class="right__status status">
+                <span
+                  v-show="btnCheckClicked"
+                  :class="{ success: checkStatus, error: !checkStatus }"
+                  class="status__msg"
+                  >{{
+                    checkStatus
+                      ? "Ошибок нет, тесты прошли!"
+                      : `Ошибка. Посмотрите вывод. Для возврата к редактору кода переключитесь на вкладку "Код" выше.`
+                  }}</span
+                >
+              </div>
               <div class="right__btns">
                 <FormButton
                   @click="check()"
@@ -288,6 +370,7 @@ const parser = new Markdown({
                   color="var(--color-text-primary)"
                   class="right__btn"
                   :loading="btnLoading"
+                  :disabled="!user"
                   >Проверить код</FormButton
                 >
               </div>
@@ -305,6 +388,50 @@ const parser = new Markdown({
   border-radius: 5px;
 }
 
+.solution {
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.unauthorized {
+  &__msg {
+    width: 100%;
+    display: inline-block;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    border-left: 0.375rem solid #78350f;
+    background: #ffedd5;
+    color: #431407;
+  }
+}
+
+.status {
+  margin-top: 1erm;
+  &__msg {
+    width: 100%;
+    display: inline-block;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    &.success {
+      border-left: 0.375rem solid #14532d;
+      background: #bbf7d0;
+      color: #14532d;
+    }
+    &.error {
+      border-left: 0.375rem solid #7f1d1d;
+      background: var(--color-danger);
+      color: #7f1d1d;
+    }
+  }
+}
 .challenge {
   margin-top: 2rem;
   &__languages {
@@ -325,6 +452,11 @@ const parser = new Markdown({
 }
 
 .left {
+  &__solutions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
   &__body {
     margin-top: 2rem;
   }

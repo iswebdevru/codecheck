@@ -33,6 +33,10 @@ const props = withDefaults(defineProps<Props>(), {
   color: var(--color-text-secondary);
   // position: relative;
   height: 2rem;
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .loader {
