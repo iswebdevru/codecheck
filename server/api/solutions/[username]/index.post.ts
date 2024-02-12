@@ -1,6 +1,7 @@
 export default defineEventHandler(async (event) => {
   const username = getRouterParam(event, "username");
   const data = await readBody(event);
+  if (!event.context.user) return;
 
   const solution = await prisma.solution.create({
     data: {

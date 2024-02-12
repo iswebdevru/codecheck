@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `Challenge` ADD COLUMN `published` INTEGER NOT NULL DEFAULT 1;
+
+-- AlterTable
+ALTER TABLE `Solution` ADD COLUMN `status` INTEGER NOT NULL DEFAULT 0;

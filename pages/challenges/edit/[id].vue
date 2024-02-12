@@ -43,18 +43,22 @@ import { lintKeymap } from "@codemirror/lint";
 // app.use(install, { extensions: [] });
 
 useHead({
-  title: "Добавление задания",
+  title: "Редактирование задания",
 });
 
 definePageMeta({
   middleware: "admin",
 });
 
-const store = useAdminChellengeVariantsStore();
-const { currentLang, langs, challenges } = storeToRefs(store);
-const { currentChallenge, initChallenges } = store;
+const route = useRoute();
 
-await initChallenges();
+const store = useUpdateVariantsStore();
+const { currentLang, chellengeLangs, challenges, challenge } =
+  storeToRefs(store);
+const { initChallengeVariants, currentChallenge, initLangs } = store;
+
+const test = await initLangs();
+await initChallengeVariants(route.params.id as string);
 
 const selecting = (item: any) => {
   currentLang.value = item.name;
@@ -153,24 +157,6 @@ const handleReady = (payload: any) => {
   view.value = payload.view;
 };
 
-// // Status is available at all times via Codemirror EditorView
-// const getCodemirrorStates = () => {
-//   const state = view.value.state;
-//   const ranges = state.selection.ranges;
-//   const selected = ranges.reduce(
-//     (r: any, range: any) => r + range.to - range.from,
-//     0
-//   );
-//   const cursor = ranges[0].anchor;
-//   const length = state.doc.length;
-//   const lines = state.doc.lines;
-//   // more state info ...
-//   // return ...
-// };
-
-// const { data: langs } = await useFetch("/api/langs");
-
-// const markdown = ref("");
 const renderedMd = ref();
 const parser = new Markdown({
   // html: true,
@@ -188,7 +174,7 @@ const parser = new Markdown({
     return ""; // use external default escaping
   },
 });
-
+renderedMd.value = parser.render(currentChallenge().mdInstructrion);
 watch(
   () => {
     return currentChallenge().mdInstructrion;
@@ -197,24 +183,6 @@ watch(
     renderedMd.value = parser.render(currentChallenge().mdInstructrion);
   }
 );
-
-currentChallenge().test = `import unittest
-
-from solution_code import *
-
-class TestMethods(unittest.TestCase):
-
-    def test_function(self):
-        self.assertEqual(addition(1), 2)
-        self.assertEqual(addition(0), 1)
-        self.assertEqual(addition(99), 100)
-        self.assertEqual(addition(10), 11)
-
-if __name__ == "__main__":
-    unittest.main()`;
-
-currentChallenge().code = `def addition(n):
-  return n + 1`;
 
 const btnLoading = ref(true);
 
@@ -241,30 +209,31 @@ const check = async () => {
 };
 
 const challengeName = ref("");
+challengeName.value = challenge.value.name;
+
 const challengeDescription = ref("");
+challengeDescription.value = challenge.value.description;
 
 const { data: tags } = useFetch("/api/tags");
-const selectedTags = ref();
+// const tags = challenges.value.tags;
+const selectedTags = ref(challenge.value.tags);
 
-const addChallenge = async () => {
-  const data = await $fetch("/api/challenges", {
-    method: "POST",
+const updateChallenge = async () => {
+  const data = await $fetch(`/api/challenges/${challenge.value.id}`, {
+    method: "PATCH",
     body: {
       name: challengeName.value,
       description: challengeDescription.value,
       tags: selectedTags.value,
-      variants: Array.from(challenges.value, ([name, value]) => ({
-        name,
-        value,
-      })),
+      variants: Array.from(
+        Object.entries(challenges.value),
+        ([name, value]) => ({
+          name,
+          value,
+        })
+      ),
     },
   });
-  console.log(
-    Array.from(challenges.value, ([name, value]) => ({
-      name,
-      value,
-    }))
-  );
 };
 </script>
 
@@ -306,7 +275,6 @@ const addChallenge = async () => {
                 <div v-html="renderedMd" class="markdown-body"></div>
               </client-only>
             </Tab>
-            <Tab title="Решение"> Решение </Tab>
           </TabsWrapper>
         </div>
         <div class="challenge__right right">
@@ -315,7 +283,7 @@ const addChallenge = async () => {
               <LanguageSelect
                 @selectedLanguage="selecting"
                 class="challenge__languages"
-                :languages="langs"
+                :languages="chellengeLangs"
               ></LanguageSelect>
             </template>
 
@@ -333,10 +301,6 @@ const addChallenge = async () => {
                   :indent-with-tab="true"
                   :tab-size="2"
                   :extensions="codeExtensions"
-                  @ready="handleReady"
-                  @change="console.log('change', $event)"
-                  @focus="console.log('focus', $event)"
-                  @blur="console.log('blur', $event)"
                 />
               </Tab>
               <Tab title="Вывод">
@@ -352,10 +316,6 @@ const addChallenge = async () => {
                   :tab-size="2"
                   :extensions="outputExtensions"
                   disabled
-                  @ready="handleReady"
-                  @change="console.log('change', $event)"
-                  @focus="console.log('focus', $event)"
-                  @blur="console.log('blur', $event)"
                 />
               </Tab>
               <Tab title="Тесты">
@@ -371,10 +331,6 @@ const addChallenge = async () => {
                   :indent-with-tab="true"
                   :tab-size="2"
                   :extensions="testsExtensions"
-                  @ready="handleReady"
-                  @change="console.log('change', $event)"
-                  @focus="console.log('focus', $event)"
-                  @blur="console.log('blur', $event)"
                 />
               </Tab>
             </template>
@@ -389,11 +345,11 @@ const addChallenge = async () => {
                   >Проверить код</FormButton
                 >
                 <FormButton
-                  @click="addChallenge"
+                  @click="updateChallenge"
                   background="var(--color-success)"
                   color="var(--color-text-priamary)"
                   class="right__btn"
-                  >Добавить задачу</FormButton
+                  >Обновить задачу</FormButton
                 >
               </div>
             </template>

@@ -1,9 +1,27 @@
 <script setup lang="ts">
+import type { Challenge } from "@prisma/client";
+
 useHead({
   title: "Задания",
 });
 const { data: challenges } = await useFetch("/api/challenges");
 console.log(challenges.value);
+
+const user = useUser();
+const deleteChallenge = async (id: number) => {
+  const data = await $fetch(`/api/challenges/${id}`, {
+    method: "DELETE",
+  });
+  if (data) {
+    challenges.value = challenges.value.filter((el: Challenge) => {
+      return el.id !== id;
+    });
+  }
+  console.log(data);
+};
+const updateChallenge = (id: number) => {
+  navigateTo(`/challenges/edit/${id}`);
+};
 </script>
 
 <template>
@@ -15,34 +33,49 @@ console.log(challenges.value);
       <div class="challenges__body">
         <!-- <h1 class="">Задания</h1> -->
         <div class="challenges__items">
-          <div
-            v-for="item in challenges"
-            :key="item.id"
-            class="challenges__item item"
-          >
-            <NuxtLink :to="`/challenges/${item.id}`" class="item__title">{{
-              item.name
-            }}</NuxtLink>
-            <p class="item__description">{{ item.description }}</p>
-            <div class="item__bottom">
-              <div v-if="item.tags" class="item__tags">
-                <span
-                  v-for="tag in item.tags"
-                  :key="tag.id"
-                  class="item__tag"
-                  >{{ tag.name }}</span
+          <TransitionGroup name="fade">
+            <div
+              v-for="item in challenges"
+              :key="item.id"
+              class="challenges__item item"
+            >
+              <NuxtLink :to="`/challenges/${item.id}`" class="item__title">{{
+                item.name
+              }}</NuxtLink>
+              <p class="item__description">{{ item.description }}</p>
+              <div class="item__bottom">
+                <div v-if="item.tags" class="item__tags">
+                  <span
+                    v-for="tag in item.tags"
+                    :key="tag.id"
+                    class="item__tag"
+                    >{{ tag.name }}</span
+                  >
+                </div>
+                <div class="item__langs">
+                  <img
+                    class="item__lang-img"
+                    v-for="lang in item.variants"
+                    :src="`/langs/${lang.lang.name?.toLowerCase()}.svg`"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div v-if="user?.role === 1" class="item__controls">
+                <FormButton
+                  @click.prevent="updateChallenge(item.id)"
+                  background="var(--color-warning)"
+                  color="var(--color-text-primary)"
+                  >Редактировать</FormButton
+                >
+                <FormButton
+                  @click.prevent="deleteChallenge(item.id)"
+                  background="var(--color-danger)"
+                  >Удалить</FormButton
                 >
               </div>
-              <div class="item__langs">
-                <img
-                  class="item__lang-img"
-                  v-for="lang in item.variants"
-                  :src="`/langs/${lang.lang.name?.toLowerCase()}.svg`"
-                  alt=""
-                />
-              </div>
             </div>
-          </div>
+          </TransitionGroup>
         </div>
       </div>
     </div>
@@ -50,6 +83,15 @@ console.log(challenges.value);
 </template>
 
 <style scoped lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .challenges {
   &__aside {
     // box-shadow: 0 0 10px rgba(0, 0, 0, 0.086);
@@ -79,6 +121,12 @@ console.log(challenges.value);
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.086);
+  &__controls {
+    margin-top: 1rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+  }
   &__bottom {
     margin-top: 1rem;
     display: flex;

@@ -205,7 +205,12 @@ const parser = new Markdown({
 const { data: solutions } = await useFetch(
   `/api/solutions/all/${currentChallenge().id}`
 );
-console.log(solutions.value, "ffffff");
+
+const dateFormat = new Intl.DateTimeFormat("ru", {
+  timeZone: "Europe/Moscow",
+  timeStyle: "medium",
+  dateStyle: "short",
+});
 </script>
 
 <template>
@@ -245,9 +250,9 @@ console.log(solutions.value, "ffffff");
                   <div class="solution__body">
                     <h3>{{ solution.user.fio }}</h3>
                     <div class="solution__bottom">
-                      <span>{{
-                        new Date(solution.createdAt).toLocaleString()
-                      }}</span>
+                      <span>
+                        {{ dateFormat.format(new Date(solution.createdAt)) }}
+                      </span>
                       <span>{{ solution.user?.group }}</span>
                     </div>
                   </div>
@@ -299,10 +304,6 @@ console.log(solutions.value, "ffffff");
                   :indent-with-tab="true"
                   :tab-size="2"
                   :extensions="codeExtensions"
-                  @ready="handleReady"
-                  @change="console.log('change', $event)"
-                  @focus="console.log('focus', $event)"
-                  @blur="console.log('blur', $event)"
                 />
               </Tab>
               <Tab title="Вывод">
@@ -318,10 +319,6 @@ console.log(solutions.value, "ffffff");
                   :tab-size="2"
                   :extensions="outputExtensions"
                   disabled
-                  @ready="handleReady"
-                  @change="console.log('change', $event)"
-                  @focus="console.log('focus', $event)"
-                  @blur="console.log('blur', $event)"
                 />
               </Tab>
               <Tab title="Тесты">
@@ -337,10 +334,6 @@ console.log(solutions.value, "ffffff");
                   :indent-with-tab="true"
                   :tab-size="2"
                   :extensions="testsExtensions"
-                  @ready="handleReady"
-                  @change="console.log('change', $event)"
-                  @focus="console.log('focus', $event)"
-                  @blur="console.log('blur', $event)"
                 />
               </Tab>
             </template>
@@ -378,7 +371,6 @@ console.log(solutions.value, "ffffff");
           </TabsWrapper>
         </div>
       </div>
-      <!-- {{ $route.params.id }} -->
     </div>
   </div>
 </template>

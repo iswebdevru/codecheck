@@ -40,6 +40,7 @@ model Challenge {
   description String
   tags        Tag[]
   variants    ChallengeVariant[]
+  published   Int                @default(1)
 }
 
 model ChallengeVariant {
@@ -63,6 +64,7 @@ model Solution {
   updatedAt          DateTime         @updatedAt
   username           String
   user               User             @relation(references: [username], fields: [username], onDelete: Cascade)
+  status             Int              @default(0)
 }
 
 model Language {

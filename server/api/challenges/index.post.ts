@@ -2,7 +2,7 @@ import { ChallengeVariant } from "@prisma/client";
 
 export default defineEventHandler(async (event) => {
   const data = await readBody(event);
-  if (!data) return;
+  if (!data || event.context.user?.role !== 1 || !event.context.user) return;
 
   let variants: ChallengeVariant[] = [];
 
