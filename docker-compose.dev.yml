@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:12.3-alpine
+    restart: always
+    ports: 
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_USER: ${PG_USER}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:8.3
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      
+    ports:
+      - 15432:80  
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+volumes:
+    postgres:
+    pgadmin:

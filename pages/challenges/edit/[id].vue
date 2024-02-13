@@ -57,7 +57,7 @@ const { currentLang, chellengeLangs, challenges, challenge } =
   storeToRefs(store);
 const { initChallengeVariants, currentChallenge, initLangs } = store;
 
-const test = await initLangs();
+await initLangs();
 await initChallengeVariants(route.params.id as string);
 
 const selecting = (item: any) => {
