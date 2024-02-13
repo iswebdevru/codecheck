@@ -1,14 +1,14 @@
-FROM node:20.10.0
+FROM node:20-alpine
 
-ENV APP_ROOT /web
+WORKDIR /codechick
 
-WORKDIR ${APP_ROOT}
+RUN npm config set strict-ssl false
+COPY --link package.json package-lock.json ./
+RUN npm install
 
-ADD . ${APP_ROOT}
-
-RUN npm ci
+COPY --link . .
 
 RUN npm run build
-RUN cp .env .output/server/
-RUN npx prisma migrate deploy
-CMD node .output/server/index.mjs
+RUN npm prune
+
+CMD ["node", ".output/server/index.mjs"]
