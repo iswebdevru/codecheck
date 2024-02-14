@@ -7,9 +7,6 @@ services:
       - 80:3000
     depends_on:
       - postgres
-    volumes:
-      - .:/codechick
-      - node_modules:/codechick/node_modules
 
   postgres:
     image: postgres:12.3-alpine
@@ -38,4 +35,3 @@ services:
 volumes:
     postgres:
     pgadmin:
-    node_modules:

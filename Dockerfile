@@ -1,8 +1,8 @@
-FROM node:20-alpine
+FROM node:21-bookworm
 
 WORKDIR /codechick
 
-RUN npm config set strict-ssl false
+# RUN npm config set strict-ssl false
 COPY --link package.json package-lock.json ./
 RUN npm install
 
