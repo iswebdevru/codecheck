@@ -22,20 +22,33 @@ const deleteChallenge = async (id: number) => {
 const updateChallenge = (id: number) => {
   navigateTo(`/challenges/edit/${id}`);
 };
+
+const search = ref("");
+
+const challengesSearched = computed(() => {
+  return challenges.value.filter((item: any) => {
+    return item.name.toLowerCase().indexOf(search.value.toLowerCase()) > -1;
+  });
+});
 </script>
 
 <template>
   <div class="challenges">
     <div class="challenges__container">
       <div class="challenges__aside">
-        <TextInput placeholder="Поиск" model-value="" name="" id=""></TextInput>
+        <TextInput
+          placeholder="Поиск по названию"
+          v-model="search"
+          name="search"
+          id="search"
+        ></TextInput>
       </div>
       <div class="challenges__body">
         <!-- <h1 class="">Задания</h1> -->
         <div class="challenges__items">
           <TransitionGroup name="fade">
             <div
-              v-for="item in challenges"
+              v-for="item in challengesSearched"
               :key="item.id"
               class="challenges__item item"
             >
@@ -146,8 +159,11 @@ const updateChallenge = (id: number) => {
     height: 1.2rem;
   }
   &__title {
-    color: black;
-    font-size: 2rem;
+    color: var(--color-text-primary);
+    // text-decoration: underline;
+    // font-weight: 200;
+
+    font-size: 1.5rem;
   }
   &__description {
     margin-top: 1rem;
@@ -156,7 +172,7 @@ const updateChallenge = (id: number) => {
   &__tag {
     background: #52525b;
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     padding: 0.4rem;
     border-radius: 0.3rem;
   }

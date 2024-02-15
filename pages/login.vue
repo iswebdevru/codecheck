@@ -38,6 +38,7 @@ useHead({
       <!-- {{ status }} -->
       <form @submit.prevent="submitForm" class="form__body">
         <h1 class="form__title">Авторизация</h1>
+
         <div class="form__item">
           <LabelInput for="user">Логин</LabelInput>
           <TextInput id="user" name="username" v-model="username"></TextInput>
@@ -51,6 +52,9 @@ useHead({
             v-model="password"
           ></TextInput>
         </div>
+        <p>
+          Авторизация по данным <a href="https://д.ркэ.рф"><u>д.ркэ.рф</u></a>
+        </p>
         <FormButton
           :loading="btnLoading"
           type="submit"
