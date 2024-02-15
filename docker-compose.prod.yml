@@ -1,17 +1,60 @@
 version: "3.9"
 
+x-logging: &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100m
+
 services:
+  server:
+    image: judge0/judge0:1.13.0
+    volumes:
+      - ./judge0.conf:/judge0.conf:ro
+    ports:
+      - 2358:2358
+    privileged: true
+    <<: *default-logging
+    restart: always
+
+  workers:
+    image: judge0/judge0:1.13.0
+    command: ["./scripts/workers"]
+    volumes:
+      - ./judge0.conf:/judge0.conf:ro
+    privileged: true
+    <<: *default-logging
+    restart: always
+
+  redis:
+    image: redis:6.0
+    command:
+      [
+        "bash",
+        "-c",
+        'docker-entrypoint.sh --appendonly yes --requirepass "$$REDIS_PASSWORD"',
+      ]
+    env_file: judge0.conf
+    volumes:
+      - redis-data:/data
+    ports:
+      - 6379:6379
+    <<: *default-logging
+    restart: always
+
   nuxt:
     build: .
+    env_file:
+      - .env
     ports:
       - 80:3000
     depends_on:
       - postgres
 
   postgres:
-    image: postgres:12.3-alpine
+    image: postgres:13.0
     restart: always
-    ports: 
+    ports:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD=${PG_PASSWORD}
@@ -19,19 +62,20 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
 
-  pgadmin:
-    image: dpage/pgadmin4:8.3
-    environment:
-     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-     - PGADMIN_LISTEN_PORT=15432
-    ports:
-      - 15432:15432  
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    depends_on:
-      - postgres
+#  pgadmin:
+#   image: dpage/pgadmin4:8.3
+#  environment:
+#  - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+# - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+# - PGADMIN_LISTEN_PORT=15432
+# ports:
+#   - 15432:15432
+# volumes:
+#   - pgadmin:/var/lib/pgadmin
+# depends_on:
+#   - postgres
 
 volumes:
-    postgres:
-    pgadmin:
+  postgres:
+  redis-data:
+  #pgadmin:
