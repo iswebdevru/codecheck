@@ -25,3 +25,5 @@ logs
 
 .judge0.conf
 !judge0.conf.example
+
+tmp

@@ -112,7 +112,7 @@ const logout = async () => {
   // align-items: flex-start;
   top: 100%;
   right: 0;
-  left: auto;
+  left: 0;
   min-width: fit-content;
   overflow: hidden;
   transition: all 0.3s ease 0s;

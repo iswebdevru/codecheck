@@ -18,6 +18,9 @@ definePageMeta({
         <NuxtLink class="admin__nav-item" to="/admin/tags"
           >Добавить тэги</NuxtLink
         >
+        <NuxtLink class="admin__nav-item" to="/admin/users"
+          >Пользователи</NuxtLink
+        >
       </nav>
     </div>
   </div>

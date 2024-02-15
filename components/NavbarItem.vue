@@ -20,6 +20,9 @@ const props = defineProps<Props>();
     // font-weight: 600;
     text-decoration: none;
     color: var(--color-text-link);
+    @media (max-width: 768px) {
+      padding: 0;
+    }
     &:hover {
       color: var(--color-primary);
     }

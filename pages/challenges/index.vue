@@ -107,7 +107,11 @@ const updateChallenge = (id: number) => {
     padding-right: 1rem;
     padding-left: 1rem;
     display: grid;
-    grid-template-columns: 1fr 4fr;
+    grid-template-columns: 1fr 3fr;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
     // gap: 2rem;
   }
   &__items {
@@ -150,7 +154,7 @@ const updateChallenge = (id: number) => {
     font-size: 1rem;
   }
   &__tag {
-    background: black;
+    background: #52525b;
     color: white;
     font-size: 0.9rem;
     padding: 0.4rem;

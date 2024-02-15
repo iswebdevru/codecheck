@@ -152,7 +152,9 @@ const checkStatus = ref<boolean | null>(null);
 const btnCheckClicked = ref(false);
 
 const user = useUser();
-
+const { data: solutions, refresh: refreshSolutions } = await useFetch(
+  `/api/solutions/all/${currentChallenge().id}`
+);
 const check = async () => {
   start();
   btnLoading.value = false;
@@ -180,7 +182,7 @@ const check = async () => {
       },
     });
   }
-
+  await refreshSolutions();
   useState("tabsChallengeRight").value = "Вывод";
   finish();
   btnLoading.value = true;
@@ -201,10 +203,6 @@ const parser = new Markdown({
     return ""; // use external default escaping
   },
 });
-
-const { data: solutions } = await useFetch(
-  `/api/solutions/all/${currentChallenge().id}`
-);
 
 const dateFormat = new Intl.DateTimeFormat("ru", {
   timeZone: "Europe/Moscow",
@@ -453,7 +451,7 @@ const dateFormat = new Intl.DateTimeFormat("ru", {
     margin-top: 2rem;
   }
   &__tag {
-    background: black;
+    background: #52525b;
     color: white;
     font-size: 0.9rem;
     padding: 0.4rem;

@@ -322,7 +322,7 @@ MAX_NUMBER_OF_RUNS=
 
 # Redirect stderr to stdout.
 # Default: false
-REDIRECT_STDERR_TO_STDOUT=
+REDIRECT_STDERR_TO_STDOUT=true
 
 # Maximum total size (in kilobytes) of extracted files from additional files archive.
 # Default: 10240, i.e. maximum of 10MB in total can be extracted.
