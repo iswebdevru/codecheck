@@ -23,7 +23,7 @@ logs
 .env.*
 !.env.example
 
-.judge0.conf
+judge0.conf
 !judge0.conf.example
 
 tmp
