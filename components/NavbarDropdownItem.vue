@@ -75,6 +75,7 @@ const logout = async () => {
     display: flex;
     align-items: center;
     position: relative;
+    background: none;
     // font-weight: 600;
     text-decoration: none;
     color: var(--color-text-link);
@@ -122,6 +123,7 @@ const logout = async () => {
     display: flex;
     align-items: center;
     position: relative;
+    background: none;
     // font-size: 1rem;
     // font-weight: 600;
     text-decoration: none;

@@ -2,9 +2,13 @@
 export default defineNuxtConfig({
   app: {
     head: {
+      htmlAttrs: {
+        lang: "ru",
+      },
       link: [{ rel: "icon", type: "image/png", href: "/logo.png" }],
     },
   },
+
   devtools: { enabled: false },
   // build: {
   //    transpile: ["jsonwebtoken"],
@@ -22,11 +26,15 @@ export default defineNuxtConfig({
     // sharedPrerenderData: true,
   },
 
-  modules: ["@pinia/nuxt", "nuxt-primevue"],
+  modules: ["nuxt-simple-robots", "@pinia/nuxt", "nuxt-primevue"],
+  robots: {
+    disallow: ["/admin/*"],
+    credits: false,
+  },
   primevue: {
     options: {},
     components: {
-      include: ["MultiSelect"],
+      // include: ["MultiSelect", "Paginator"],
     },
   },
   // auth: {
@@ -51,7 +59,10 @@ export default defineNuxtConfig({
   //     enableRefreshPeriodically: false,
   //   },
   // },
-  css: ["~/assets/css/main.scss"],
+  css: [
+    "~/assets/css/main.scss",
+    "~/assets/css/primevue/themes/codechecktheme/theme.scss",
+  ],
   postcss: {
     plugins: {
       autoprefixer: {},

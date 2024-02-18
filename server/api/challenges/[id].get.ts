@@ -7,6 +7,9 @@ export default defineEventHandler(async (event) => {
     include: {
       tags: true,
       variants: {
+        orderBy: {
+          languageId: "asc",
+        },
         include: {
           lang: true,
         },

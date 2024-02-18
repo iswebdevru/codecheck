@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id        String     @id
+  id        Int        @id @default(autoincrement())
   email     String
   fio       String
   username  String     @unique
@@ -23,7 +23,7 @@ model User {
 
 model Session {
   id        String   @id
-  userId    String
+  userId    Int
   expiresAt DateTime
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
@@ -57,7 +57,7 @@ model ChallengeVariant {
 
 model Solution {
   id                 Int              @id @default(autoincrement())
-  challengeVariant   ChallengeVariant @relation(fields: [challengeVariantId], references: [id])
+  challengeVariant   ChallengeVariant @relation(fields: [challengeVariantId], references: [id], onDelete: Cascade)
   challengeVariantId Int
   code               String           @db.Text
   createdAt          DateTime         @default(now())
@@ -65,6 +65,8 @@ model Solution {
   username           String
   user               User             @relation(references: [username], fields: [username], onDelete: Cascade)
   status             Int              @default(0)
+
+  @@unique([challengeVariantId, username])
 }
 
 model Language {

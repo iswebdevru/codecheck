@@ -1,4 +1,5 @@
 <script setup>
+// import "./assets/css/primevue/themes/codechecktheme/theme.scss";
 import { Codemirror, install } from "vue-codemirror";
 const nuxtApp = useNuxtApp();
 nuxtApp.vueApp.use(install, { extensions: [] });

@@ -3,16 +3,28 @@ export default defineEventHandler(async (event) => {
   const data = await readBody(event);
   if (!event.context.user) return;
 
-  const solution = await prisma.solution.create({
-    data: {
+  const solution = await prisma.solution.upsert({
+    where: {
+      challengeVariantId_username: {
+        challengeVariantId: data.variantId,
+        username: username as string,
+      },
+    },
+
+    create: {
       code: data.code,
       challengeVariantId: data.variantId,
       username: username as string,
+      status: data.status,
     },
-    include: {
-      challengeVariant: true,
-      user: true,
+    update: {
+      code: data.code,
+      challengeVariantId: data.variantId,
     },
+    // include: {
+    //   challengeVariant: true,
+    //   user: true,
+    // },
   });
   return solution;
 });

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Codemirror, install } from "vue-codemirror";
-import { python } from "@codemirror/lang-python";
 import { basicSetup } from "codemirror";
 import { darcula, darculaInit } from "@uiw/codemirror-theme-darcula";
 import "@/assets/css/markdown.scss";
@@ -38,10 +37,6 @@ import {
 } from "@codemirror/autocomplete";
 import { lintKeymap } from "@codemirror/lint";
 
-// const nuxtApp = useNuxtApp();
-// nuxtApp.vueApp.use(install, { extensions: [] });
-// app.use(install, { extensions: [] });
-
 useHead({
   title: "Редактирование задания",
 });
@@ -64,92 +59,79 @@ const selecting = (item: any) => {
   currentLang.value = item.name;
 };
 
-// const code = ref(`def hello_world():`);
-const codeExtensions = [
-  python(),
-  darculaInit({
-    settings: {
-      // fontFamily: "Consolas",
-      // background: "#2b2b2b",
-    },
-  }),
-  lineNumbers(),
-  highlightActiveLineGutter(),
-  highlightSpecialChars(),
-  history(),
-  foldGutter({}),
-  drawSelection(),
-  dropCursor(),
-  indentOnInput(),
-  EditorState.allowMultipleSelections.of(true),
-  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-  bracketMatching(),
-  closeBrackets(),
-  autocompletion(),
-  rectangularSelection(),
-  crosshairCursor(),
-  highlightActiveLine(),
-  highlightSelectionMatches(),
-  keymap.of([
-    ...closeBracketsKeymap,
-    ...defaultKeymap,
-    ...searchKeymap,
-    ...historyKeymap,
-    ...foldKeymap,
-    ...completionKeymap,
-    ...lintKeymap,
-  ]),
-];
+const codeExtensions = computed(() => {
+  let result = [
+    darculaInit({}),
+    lineNumbers(),
+    highlightActiveLineGutter(),
+    highlightSpecialChars(),
+    history(),
+    foldGutter({}),
+    drawSelection(),
+    dropCursor(),
+    indentOnInput(),
+    EditorState.allowMultipleSelections.of(true),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    rectangularSelection(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightSelectionMatches(),
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...foldKeymap,
+      ...completionKeymap,
+      ...lintKeymap,
+    ]),
+  ];
+  result.push(langExtension(currentLang.value));
+  return result;
+});
 
 const output = ref(
   `Это - вывод. Нажмите кнопку "Проверить код", и здесь появятся резултаты тестов. Сами тесты находятся во вкладке "Тесты`
 );
 
-const outputExtensions = [
-  EditorView.lineWrapping,
+const outputExtensions = [EditorView.lineWrapping, darculaInit({})];
 
-  darculaInit({
-    settings: {
-      // fontFamily: "Consolas",
-    },
-  }),
-];
-
-// const tests = ref(``);
-
-const testsExtensions = [
-  python(),
-  darculaInit({
-    settings: {
-      // fontFamily: "Consolas",
-    },
-  }),
-  lineNumbers(),
-  highlightActiveLineGutter(),
-  highlightSpecialChars(),
-  history(),
-  foldGutter({}),
-  drawSelection(),
-  dropCursor(),
-  indentOnInput(),
-  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-  bracketMatching(),
-  closeBrackets(),
-  autocompletion(),
-  rectangularSelection(),
-  crosshairCursor(),
-  highlightActiveLine(),
-  highlightSelectionMatches(),
-  keymap.of([
-    ...closeBracketsKeymap,
-    ...defaultKeymap,
-    ...searchKeymap,
-    ...historyKeymap,
-    ...foldKeymap,
-    ...completionKeymap,
-    ...lintKeymap,
-  ]),
-];
+const testsExtensions = computed(() => {
+  let result = [
+    darculaInit({}),
+    lineNumbers(),
+    highlightActiveLineGutter(),
+    highlightSpecialChars(),
+    history(),
+    foldGutter({}),
+    drawSelection(),
+    dropCursor(),
+    indentOnInput(),
+    EditorState.allowMultipleSelections.of(true),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    rectangularSelection(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightSelectionMatches(),
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...foldKeymap,
+      ...completionKeymap,
+      ...lintKeymap,
+    ]),
+  ];
+  result.push(langExtension(currentLang.value));
+  return result;
+});
 
 // Codemirror EditorView instance ref
 const view = shallowRef();
@@ -160,7 +142,6 @@ const handleReady = (payload: any) => {
 const renderedMd = ref();
 const parser = new Markdown({
   // html: true,
-
   linkify: true,
   typographer: true,
   breaks: true,
@@ -203,9 +184,6 @@ const check = async () => {
   finish();
   output.value = resCheck.stdout;
   btnLoading.value = true;
-
-  // selectedTab.value = "Вывод";
-  // console.log(resCheck);
 };
 
 const challengeName = ref("");
@@ -215,7 +193,6 @@ const challengeDescription = ref("");
 challengeDescription.value = challenge.value.description;
 
 const { data: tags } = useFetch("/api/tags");
-// const tags = challenges.value.tags;
 const selectedTags = ref(challenge.value.tags);
 
 const updateChallenge = async () => {
@@ -258,6 +235,7 @@ const updateChallenge = async () => {
                 optionLabel="name"
                 placeholder="Выбрать тэги"
                 :maxSelectedLabels="5"
+                display="chip"
               />
               <AppTextarea
                 placeholder="Описание задания"
@@ -363,65 +341,6 @@ const updateChallenge = async () => {
 
 <style lang="scss">
 // @use "@/assets/css/markdown" as *;
-
-.p-multiselect {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.375rem 0.75rem;
-  border-color: var(--color-border-primary);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-
-  &.p-focus {
-    outline: 1px solid var(--color-primary);
-  }
-}
-.p-multiselect-panel {
-  background: var(--color-bg-primary);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border-color: var(--color-border-primary);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: var(--border-radius);
-}
-
-.p-multiselect-items {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  list-style: none;
-  max-height: 100px;
-  overflow: auto;
-}
-
-.p-multiselect-item {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  background: var(--color-bg-third);
-  border-radius: var(--border-radius);
-  padding: 0.375rem 0.75rem;
-}
-
-.p-multiselect-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.375rem 0.75rem;
-}
-
-.p-checkbox {
-  display: flex;
-  gap: 5px;
-}
-
-.p-checkbox-box {
-  display: none;
-}
 
 :deep(.cm-editor) {
   border-radius: 5px;

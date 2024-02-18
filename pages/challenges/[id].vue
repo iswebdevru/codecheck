@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Codemirror, install } from "vue-codemirror";
-import { python } from "@codemirror/lang-python";
+
 import { basicSetup } from "codemirror";
 import { darcula, darculaInit } from "@uiw/codemirror-theme-darcula";
 import "@/assets/css/markdown.scss";
@@ -38,9 +38,6 @@ import {
 } from "@codemirror/autocomplete";
 import { lintKeymap } from "@codemirror/lint";
 
-// const nuxtApp = useNuxtApp();
-// nuxtApp.vueApp.use(install, { extensions: [] });
-
 const route = useRoute();
 
 const store = useChellengeVariantsStore();
@@ -52,91 +49,81 @@ useHead({
   title: `${challenge.value.name}`,
 });
 
+useState("tabsChallengeLeft").value = "Инструкция";
+
 const output = ref(
   `Это - вывод. Нажмите кнопку "Проверить код", и здесь появятся резултаты тестов. Сами тесты находятся во вкладке "Тесты`
 );
 
-const outputExtensions = [
-  EditorView.lineWrapping,
+const outputExtensions = [EditorView.lineWrapping, darculaInit()];
 
-  darculaInit({
-    settings: {
-      // fontFamily: "Consolas",
-    },
-  }),
-];
+const codeExtensions = computed(() => {
+  let result = [
+    darculaInit({}),
+    lineNumbers(),
+    highlightActiveLineGutter(),
+    highlightSpecialChars(),
+    history(),
+    foldGutter({}),
+    drawSelection(),
+    dropCursor(),
+    indentOnInput(),
+    EditorState.allowMultipleSelections.of(true),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    rectangularSelection(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightSelectionMatches(),
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...foldKeymap,
+      ...completionKeymap,
+      ...lintKeymap,
+    ]),
+  ];
+  result.push(langExtension(currentLang.value));
+  return result;
+});
 
-const code = currentChallenge().code;
-
-const codeExtensions = [
-  python(),
-  darculaInit({
-    settings: {
-      // fontFamily: "Consolas",
-      // background: "#2b2b2b",
-    },
-  }),
-  lineNumbers(),
-  highlightActiveLineGutter(),
-  highlightSpecialChars(),
-  history(),
-  foldGutter({}),
-  drawSelection(),
-  dropCursor(),
-  indentOnInput(),
-  EditorState.allowMultipleSelections.of(true),
-  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-  bracketMatching(),
-  closeBrackets(),
-  autocompletion(),
-  rectangularSelection(),
-  crosshairCursor(),
-  highlightActiveLine(),
-  highlightSelectionMatches(),
-  keymap.of([
-    ...closeBracketsKeymap,
-    ...defaultKeymap,
-    ...searchKeymap,
-    ...historyKeymap,
-    ...foldKeymap,
-    ...completionKeymap,
-    ...lintKeymap,
-  ]),
-];
-
-const testsExtensions = [
-  python(),
-  darculaInit({
-    settings: {
-      // fontFamily: "Consolas",
-    },
-  }),
-  lineNumbers(),
-  highlightActiveLineGutter(),
-  highlightSpecialChars(),
-  history(),
-  foldGutter({}),
-  drawSelection(),
-  dropCursor(),
-  indentOnInput(),
-  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-  bracketMatching(),
-  closeBrackets(),
-  autocompletion(),
-  rectangularSelection(),
-  crosshairCursor(),
-  highlightActiveLine(),
-  highlightSelectionMatches(),
-  keymap.of([
-    ...closeBracketsKeymap,
-    ...defaultKeymap,
-    ...searchKeymap,
-    ...historyKeymap,
-    ...foldKeymap,
-    ...completionKeymap,
-    ...lintKeymap,
-  ]),
-];
+const testsExtensions = computed(() => {
+  let result = [
+    darculaInit({}),
+    lineNumbers(),
+    highlightActiveLineGutter(),
+    highlightSpecialChars(),
+    history(),
+    foldGutter({}),
+    drawSelection(),
+    dropCursor(),
+    indentOnInput(),
+    EditorState.allowMultipleSelections.of(true),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    rectangularSelection(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightSelectionMatches(),
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...foldKeymap,
+      ...completionKeymap,
+      ...lintKeymap,
+    ]),
+  ];
+  result.push(langExtension(currentLang.value));
+  return result;
+});
 
 // Codemirror EditorView instance ref
 const view = shallowRef();
@@ -152,9 +139,11 @@ const checkStatus = ref<boolean | null>(null);
 const btnCheckClicked = ref(false);
 
 const user = useUser();
-const { data: solutions, refresh: refreshSolutions } = await useFetch(
-  `/api/solutions/all/${currentChallenge().id}`
+
+const { data: solutionStatus, refresh: refreshStatus } = await useFetch(
+  `/api/solutions/${user.value?.username}/${currentChallenge().id}`
 );
+
 const check = async () => {
   start();
   btnLoading.value = false;
@@ -166,6 +155,11 @@ const check = async () => {
       test: currentChallenge().test,
     },
   });
+  if (!resCheck) {
+    btnLoading.value = true;
+    finish();
+    return;
+  }
   resCheck.status.id === 3
     ? (checkStatus.value = true)
     : (checkStatus.value = false);
@@ -181,8 +175,11 @@ const check = async () => {
         variantId: currentChallenge().id,
       },
     });
+    await refreshStatus();
+    // refreshStatus();
   }
   await refreshSolutions();
+  useState("tabsChallengeLeft").value = "Решение";
   useState("tabsChallengeRight").value = "Вывод";
   finish();
   btnLoading.value = true;
@@ -209,6 +206,29 @@ const dateFormat = new Intl.DateTimeFormat("ru", {
   timeStyle: "medium",
   dateStyle: "short",
 });
+
+const { data: solutions, refresh: refreshSolutions } = await useFetch(
+  () => `/api/solutions/all/${currentChallenge().id}`
+);
+
+const clickSolutionTab = (title: string) => {
+  if (title === "Решение") {
+    refreshSolutions();
+  }
+};
+
+const showSolutions = async () => {
+  console.log("fasdf");
+  await $fetch(`/api/solutions/${user.value?.username}`, {
+    method: "POST",
+    body: {
+      code: currentChallenge().code,
+      variantId: currentChallenge().id,
+      status: 1,
+    },
+  });
+  await refreshStatus();
+};
 </script>
 
 <template>
@@ -216,7 +236,7 @@ const dateFormat = new Intl.DateTimeFormat("ru", {
     <div class="challenge__container">
       <div class="challenge__body">
         <div class="challenge__left left">
-          <TabsWrapper name="tabsChallengeLeft">
+          <TabsWrapper @tab="clickSolutionTab" name="tabsChallengeLeft">
             <Tab title="Инструкция">
               <h1 class="left__name">{{ challenge.name }}</h1>
               <div v-if="challenge.tags" class="left__tags">
@@ -233,15 +253,33 @@ const dateFormat = new Intl.DateTimeFormat("ru", {
               ></div>
             </Tab>
             <Tab title="Решение">
+              <div v-if="!solutionStatus" class="solution-info">
+                <h4 class="solution-info__title">
+                  Показать решения этой задачи (количество решений:
+                  {{ solutions.Solutions.length }})?
+                </h4>
+                <p class="solution-info__text">
+                  Если вы посмотрите решения других пользователей до того как
+                  сами решите задачу, ваше решение не будет отображаться другим
+                  пользователям на этой вкладке.
+                </p>
+                <button class="solution-info__btn" @click="showSolutions()">
+                  Показать решения
+                </button>
+              </div>
+
               <div v-if="!user" class="unauthorized">
                 <span class="unauthorized__msg"
                   >Для просмотра решений необходимо
                   <NuxtLink to="/login"><u>авторизоваться</u></NuxtLink>
                 </span>
               </div>
-              <div v-if="user" class="left__solutions">
+              <div
+                class="left__solutions"
+                v-if="solutionStatus || solutionStatus?.status === 0"
+              >
                 <div
-                  v-for="solution in solutions"
+                  v-for="solution in solutions.Solutions"
                   :key="solution.id"
                   class="solution"
                 >
@@ -257,7 +295,6 @@ const dateFormat = new Intl.DateTimeFormat("ru", {
 
                   <codemirror
                     v-model="solution.code"
-                    placeholder="Здесь пишем код"
                     :style="{
                       height: '300px',
                       'font-size': '1rem',
@@ -378,6 +415,32 @@ const dateFormat = new Intl.DateTimeFormat("ru", {
   border-radius: 5px;
 }
 
+.solution-info {
+  &__btn {
+    margin-top: 1rem;
+    width: 100%;
+    background: none;
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    border: solid 1px var(--color-border-primary);
+  }
+  &__title {
+    background: #824d2e;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+  }
+  &__text {
+    margin: 0;
+    padding: 1.2rem;
+    background: #ffedd5;
+    color: #431407;
+  }
+}
+
 .solution {
   &__body {
     display: flex;
@@ -456,6 +519,7 @@ const dateFormat = new Intl.DateTimeFormat("ru", {
     font-size: 0.9rem;
     padding: 0.4rem;
     border-radius: 0.3rem;
+    font-weight: 300;
   }
   &__tags {
     display: flex;

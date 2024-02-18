@@ -3,10 +3,10 @@ export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id");
 
   const solution = await prisma.solution.findFirst({
+    // orderBy: { createdAt: "desc" },
     where: {
-      user: {
-        username: username,
-      },
+      challengeVariantId: Number(id),
+      username: username,
     },
     include: {
       challengeVariant: true,

@@ -10,6 +10,13 @@ const tabTitles = ref(slots.default().map((tab: any) => tab.props.title));
 const selectedTitle = useState(props.name, () => tabTitles.value[0]);
 
 provide("selectedTitle", selectedTitle);
+
+const emit = defineEmits(["tab"]);
+
+const clickTab = (title: string) => {
+  emit("tab", title);
+  selectedTitle.value = title;
+};
 </script>
 
 <template>
@@ -17,7 +24,7 @@ provide("selectedTitle", selectedTitle);
     <button
       v-for="title in tabTitles"
       :key="title"
-      @click="selectedTitle = title"
+      @click="clickTab(title)"
       class="tabs__tab"
       :class="{ tab_active: selectedTitle == title }"
     >
@@ -44,6 +51,7 @@ provide("selectedTitle", selectedTitle);
     padding: 0 1rem;
   }
   &__tab {
+    background: none;
     padding: 1rem 1.2rem;
     font-size: 1rem;
     margin-bottom: -1px;

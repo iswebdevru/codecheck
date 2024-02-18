@@ -1,6 +1,5 @@
-import { Argon2id } from "oslo/password";
 import { prisma, lucia } from "../../utils/auth";
-import { generateId } from "lucia";
+// import { generateId } from "lucia";
 
 // import type { DatabaseUser } from "../utils/db";
 
@@ -62,7 +61,7 @@ export default eventHandler(async (event) => {
   if (!existingUser) {
     existingUser = await prisma.user.create({
       data: {
-        id: generateId(15),
+        // id: generateId(15),
         email: userInfo[0].email,
         fio: userInfo[0].fullname,
         username: userInfo[0].username,
@@ -81,17 +80,6 @@ export default eventHandler(async (event) => {
       },
     });
   }
-
-  // const validPassword = await new Argon2id().verify(
-  //   existingUser.password,
-  //   password
-  // );
-  // if (!validPassword) {
-  //   throw createError({
-  //     message: "Incorrect username or password",
-  //     statusCode: 400,
-  //   });
-  // }
 
   const session = await lucia.createSession(existingUser!.id, {});
   appendHeader(

@@ -34,7 +34,7 @@ declare module "lucia" {
 }
 
 export interface DatabaseUser {
-  id: string;
+  id: number;
   username: string;
   password: string;
   email: string;

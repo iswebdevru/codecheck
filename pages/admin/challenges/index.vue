@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { Codemirror, install } from "vue-codemirror";
-import { python } from "@codemirror/lang-python";
-import { basicSetup } from "codemirror";
 import { darcula, darculaInit } from "@uiw/codemirror-theme-darcula";
 import "@/assets/css/markdown.scss";
 import hljs from "highlight.js";
@@ -38,10 +36,6 @@ import {
 } from "@codemirror/autocomplete";
 import { lintKeymap } from "@codemirror/lint";
 
-// const nuxtApp = useNuxtApp();
-// nuxtApp.vueApp.use(install, { extensions: [] });
-// app.use(install, { extensions: [] });
-
 useHead({
   title: "Добавление задания",
 });
@@ -61,41 +55,39 @@ const selecting = (item: any) => {
 };
 
 // const code = ref(`def hello_world():`);
-const codeExtensions = [
-  python(),
-  darculaInit({
-    settings: {
-      // fontFamily: "Consolas",
-      // background: "#2b2b2b",
-    },
-  }),
-  lineNumbers(),
-  highlightActiveLineGutter(),
-  highlightSpecialChars(),
-  history(),
-  foldGutter({}),
-  drawSelection(),
-  dropCursor(),
-  indentOnInput(),
-  EditorState.allowMultipleSelections.of(true),
-  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-  bracketMatching(),
-  closeBrackets(),
-  autocompletion(),
-  rectangularSelection(),
-  crosshairCursor(),
-  highlightActiveLine(),
-  highlightSelectionMatches(),
-  keymap.of([
-    ...closeBracketsKeymap,
-    ...defaultKeymap,
-    ...searchKeymap,
-    ...historyKeymap,
-    ...foldKeymap,
-    ...completionKeymap,
-    ...lintKeymap,
-  ]),
-];
+const codeExtensions = computed(() => {
+  let result = [
+    darculaInit({}),
+    lineNumbers(),
+    highlightActiveLineGutter(),
+    highlightSpecialChars(),
+    history(),
+    foldGutter({}),
+    drawSelection(),
+    dropCursor(),
+    indentOnInput(),
+    EditorState.allowMultipleSelections.of(true),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    rectangularSelection(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightSelectionMatches(),
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...foldKeymap,
+      ...completionKeymap,
+      ...lintKeymap,
+    ]),
+  ];
+  result.push(langExtension(currentLang.value));
+  return result;
+});
 
 const output = ref(
   `Это - вывод. Нажмите кнопку "Проверить код", и здесь появятся резултаты тестов. Сами тесты находятся во вкладке "Тесты`
@@ -113,39 +105,39 @@ const outputExtensions = [
 
 // const tests = ref(``);
 
-const testsExtensions = [
-  python(),
-  darculaInit({
-    settings: {
-      // fontFamily: "Consolas",
-    },
-  }),
-  lineNumbers(),
-  highlightActiveLineGutter(),
-  highlightSpecialChars(),
-  history(),
-  foldGutter({}),
-  drawSelection(),
-  dropCursor(),
-  indentOnInput(),
-  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-  bracketMatching(),
-  closeBrackets(),
-  autocompletion(),
-  rectangularSelection(),
-  crosshairCursor(),
-  highlightActiveLine(),
-  highlightSelectionMatches(),
-  keymap.of([
-    ...closeBracketsKeymap,
-    ...defaultKeymap,
-    ...searchKeymap,
-    ...historyKeymap,
-    ...foldKeymap,
-    ...completionKeymap,
-    ...lintKeymap,
-  ]),
-];
+const testsExtensions = computed(() => {
+  let result = [
+    darculaInit({}),
+    lineNumbers(),
+    highlightActiveLineGutter(),
+    highlightSpecialChars(),
+    history(),
+    foldGutter({}),
+    drawSelection(),
+    dropCursor(),
+    indentOnInput(),
+    EditorState.allowMultipleSelections.of(true),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    rectangularSelection(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightSelectionMatches(),
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...foldKeymap,
+      ...completionKeymap,
+      ...lintKeymap,
+    ]),
+  ];
+  result.push(langExtension(currentLang.value));
+  return result;
+});
 
 // Codemirror EditorView instance ref
 const view = shallowRef();
@@ -153,24 +145,6 @@ const handleReady = (payload: any) => {
   view.value = payload.view;
 };
 
-// // Status is available at all times via Codemirror EditorView
-// const getCodemirrorStates = () => {
-//   const state = view.value.state;
-//   const ranges = state.selection.ranges;
-//   const selected = ranges.reduce(
-//     (r: any, range: any) => r + range.to - range.from,
-//     0
-//   );
-//   const cursor = ranges[0].anchor;
-//   const length = state.doc.length;
-//   const lines = state.doc.lines;
-//   // more state info ...
-//   // return ...
-// };
-
-// const { data: langs } = await useFetch("/api/langs");
-
-// const markdown = ref("");
 const renderedMd = ref();
 const parser = new Markdown({
   // html: true,
@@ -205,16 +179,14 @@ from solution_code import *
 class TestMethods(unittest.TestCase):
 
     def test_function(self):
-        self.assertEqual(addition(1), 2)
-        self.assertEqual(addition(0), 1)
-        self.assertEqual(addition(99), 100)
-        self.assertEqual(addition(10), 11)
+        self.assertEqual(названиефункции(1), 2)
+
 
 if __name__ == "__main__":
     unittest.main()`;
 
-currentChallenge().code = `def addition(n):
-  return n + 1`;
+currentChallenge().code = `def названиефункции(n):
+ `;
 
 const btnLoading = ref(true);
 
@@ -289,6 +261,7 @@ const addChallenge = async () => {
                 optionLabel="name"
                 placeholder="Выбрать тэги"
                 :maxSelectedLabels="5"
+                display="chip"
               />
               <AppTextarea
                 placeholder="Описание задания"
@@ -333,10 +306,6 @@ const addChallenge = async () => {
                   :indent-with-tab="true"
                   :tab-size="2"
                   :extensions="codeExtensions"
-                  @ready="handleReady"
-                  @change="console.log('change', $event)"
-                  @focus="console.log('focus', $event)"
-                  @blur="console.log('blur', $event)"
                 />
               </Tab>
               <Tab title="Вывод">
@@ -352,10 +321,6 @@ const addChallenge = async () => {
                   :tab-size="2"
                   :extensions="outputExtensions"
                   disabled
-                  @ready="handleReady"
-                  @change="console.log('change', $event)"
-                  @focus="console.log('focus', $event)"
-                  @blur="console.log('blur', $event)"
                 />
               </Tab>
               <Tab title="Тесты">
@@ -371,10 +336,6 @@ const addChallenge = async () => {
                   :indent-with-tab="true"
                   :tab-size="2"
                   :extensions="testsExtensions"
-                  @ready="handleReady"
-                  @change="console.log('change', $event)"
-                  @focus="console.log('focus', $event)"
-                  @blur="console.log('blur', $event)"
                 />
               </Tab>
             </template>
@@ -406,67 +367,6 @@ const addChallenge = async () => {
 </template>
 
 <style lang="scss">
-// @use "@/assets/css/markdown" as *;
-
-.p-multiselect {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.375rem 0.75rem;
-  border-color: var(--color-border-primary);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-
-  &.p-focus {
-    outline: 1px solid var(--color-primary);
-  }
-}
-.p-multiselect-panel {
-  background: var(--color-bg-primary);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border-color: var(--color-border-primary);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: var(--border-radius);
-}
-
-.p-multiselect-items {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  list-style: none;
-  max-height: 100px;
-  overflow: auto;
-}
-
-.p-multiselect-item {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  background: var(--color-bg-third);
-  border-radius: var(--border-radius);
-  padding: 0.375rem 0.75rem;
-}
-
-.p-multiselect-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.375rem 0.75rem;
-}
-
-.p-checkbox {
-  display: flex;
-  gap: 5px;
-}
-
-.p-checkbox-box {
-  display: none;
-}
-
 :deep(.cm-editor) {
   border-radius: 5px;
 }

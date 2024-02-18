@@ -5,7 +5,6 @@ useHead({
   title: "Задания",
 });
 const { data: challenges } = await useFetch("/api/challenges");
-console.log(challenges.value);
 
 const user = useUser();
 const deleteChallenge = async (id: number) => {
@@ -17,7 +16,6 @@ const deleteChallenge = async (id: number) => {
       return el.id !== id;
     });
   }
-  console.log(data);
 };
 const updateChallenge = (id: number) => {
   navigateTo(`/challenges/edit/${id}`);
@@ -141,8 +139,11 @@ const challengesSearched = computed(() => {
   &__controls {
     margin-top: 1rem;
     display: flex;
-    align-items: flex-end;
+    justify-content: flex-end;
     gap: 1rem;
+    button {
+      width: auto;
+    }
   }
   &__bottom {
     margin-top: 1rem;

@@ -23,6 +23,15 @@ const props = withDefaults(defineProps<Props>(), {
 </template>
 
 <style scoped lang="scss">
+// button {
+//   background: none;
+//   border: none;
+//   cursor: pointer;
+//   font-family: inherit; /* 1 */
+//   font-size: 100%; /* 1 */
+//   line-height: 1.15; /* 1 */
+//   margin: 0; /* 2 */
+// }
 .button {
   padding: 0.5rem 0.75rem;
   border-radius: var(--border-radius);

@@ -12,7 +12,7 @@
 
   --color-text-primary: #000000;
   --color-text-secondary: #ffffff;
-  --color-text-link: #9ca3af;
+  --color-text-link: #6b7280;
 
   --color-border-primary: #e5e7eb;
 
@@ -22,22 +22,22 @@
   --p-anchor-gutter: 4px;
 }
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
+// * {
+//   padding: 0;
+//   margin: 0;
+//   box-sizing: b  order-box;
+// }
 html {
   height: 100%;
 }
 body {
-  font-family: Rubik;
+  font-family: "Rubik";
   background: var(--color-bg-primary);
   margin: 0;
 }
 
 button {
-  background: none;
+  // background: none;
   border: none;
   cursor: pointer;
 }
@@ -79,31 +79,31 @@ input {
   * 1. Remove the inheritance of text transform in Firefox.
   */
 
-button,
-select {
-  /* 1 */
-  text-transform: none;
-}
+// button,
+// select {
+//   /* 1 */
+//   text-transform: none;
+// }
 
 /**
   * Remove the inner border and padding in Firefox.
   */
 
-button::-moz-focus-inner,
-[type="button"]::-moz-focus-inner,
-[type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner {
-  border-style: none;
-  padding: 0;
-}
+// button::-moz-focus-inner,
+// [type="button"]::-moz-focus-inner,
+// [type="reset"]::-moz-focus-inner,
+// [type="submit"]::-moz-focus-inner {
+//   border-style: none;
+//   padding: 0;
+// }
 
 /**
   * Restore the focus styles unset by the previous rule.
   */
 
-button:-moz-focusring,
-[type="button"]:-moz-focusring,
-[type="reset"]:-moz-focusring,
-[type="submit"]:-moz-focusring {
-  outline: 1px dotted ButtonText;
-}
+// button:-moz-focusring,
+// [type="button"]:-moz-focusring,
+// [type="reset"]:-moz-focusring,
+// [type="submit"]:-moz-focusring {
+//   outline: 1px dotted ButtonText;
+// }

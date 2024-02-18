@@ -14,7 +14,7 @@ const open = () => {
   menuOpened.value = !menuOpened.value;
 };
 const handleMenuItem = (e: any) => {
-  console.log(e.target.nodeName);
+  // console.log(e.target.nodeName);
   if (e.target.nodeName == "A" || e.target.nodeName == "BUTTON") {
     menuOpened.value = false;
   }
@@ -30,6 +30,7 @@ const handleMenuItem = (e: any) => {
     >
       <NavbarItem to="/">Главная</NavbarItem>
       <NavbarItem to="/challenges">Задания</NavbarItem>
+      <NavbarItem to="/olimp">Олимп</NavbarItem>
       <NavbarItem v-if="user?.role === 1" to="/admin">Админ</NavbarItem>
 
       <NavbarDropdownItem v-if="user" :items="dropdownItems">{{
