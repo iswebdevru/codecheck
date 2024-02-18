@@ -2,16 +2,38 @@ export default defineEventHandler(async (event) => {
   const username = getRouterParam(event, "username");
   const id = getRouterParam(event, "id");
 
-  const solution = await prisma.solution.findFirst({
-    // orderBy: { createdAt: "desc" },
+  // const solution = await prisma.solution.findFirst({
+  //   where: {
+  //     challengeVariantId: Number(id),
+  //     username: username,
+  //   },
+  //   include: {
+  //     challengeVariant: {
+  //       include: {
+  //         lang: true,
+  //       },
+  //     },
+  //     user: true,
+  //   },
+  // });
+
+  const solution = await prisma.challenge.findFirst({
     where: {
-      challengeVariantId: Number(id),
-      username: username,
+      id: Number(id),
     },
     include: {
-      challengeVariant: true,
-      user: true,
+      variants: {
+        include: {
+          lang: true,
+          Solutions: {
+            where: {
+              username: username,
+            },
+          },
+        },
+      },
     },
   });
+
   return solution;
 });

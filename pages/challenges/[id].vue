@@ -50,6 +50,7 @@ useHead({
 });
 
 useState("tabsChallengeLeft").value = "Инструкция";
+useState("tabsChallengeRight").value = "Код";
 
 const output = ref(
   `Это - вывод. Нажмите кнопку "Проверить код", и здесь появятся резултаты тестов. Сами тесты находятся во вкладке "Тесты`
@@ -140,9 +141,32 @@ const btnCheckClicked = ref(false);
 
 const user = useUser();
 
-const { data: solutionStatus, refresh: refreshStatus } = await useFetch(
-  `/api/solutions/${user.value?.username}/${currentChallenge().id}`
+const { data: userChallengeSolutions, refresh: refreshStatus } = await useFetch(
+  `/api/solutions/${user.value?.username}/${route.params.id}`
 );
+
+const currentSolutionStatus = computed(() => {
+  let data: any = {};
+  userChallengeSolutions.value.variants.forEach((item: any) => {
+    if (item.id === currentChallenge().id) {
+      data = item;
+    }
+  });
+
+  return data.Solutions[0];
+});
+
+const setStatusSoltion = () => {
+  langs.value.forEach((lang) => {
+    userChallengeSolutions.value.variants.forEach((item: any) => {
+      if (lang.name === item.lang.name && item.Solutions[0]?.status === 0) {
+        lang.status = true;
+      }
+    });
+  });
+};
+
+setStatusSoltion();
 
 const check = async () => {
   start();
@@ -179,6 +203,7 @@ const check = async () => {
     // refreshStatus();
   }
   await refreshSolutions();
+  setStatusSoltion();
   useState("tabsChallengeLeft").value = "Решение";
   useState("tabsChallengeRight").value = "Вывод";
   finish();
@@ -253,7 +278,7 @@ const showSolutions = async () => {
               ></div>
             </Tab>
             <Tab title="Решение">
-              <div v-if="!solutionStatus" class="solution-info">
+              <div v-if="!currentSolutionStatus" class="solution-info">
                 <h4 class="solution-info__title">
                   Показать решения этой задачи (количество решений:
                   {{ solutions.Solutions.length }})?
@@ -276,7 +301,9 @@ const showSolutions = async () => {
               </div>
               <div
                 class="left__solutions"
-                v-if="solutionStatus || solutionStatus?.status === 0"
+                v-if="
+                  currentSolutionStatus || currentSolutionStatus?.status === 0
+                "
               >
                 <div
                   v-for="solution in solutions.Solutions"
@@ -447,6 +474,9 @@ const showSolutions = async () => {
     flex-direction: column;
     gap: 0.5rem;
     padding: 0.5rem;
+    h3 {
+      margin: 0;
+    }
   }
   &__bottom {
     display: flex;

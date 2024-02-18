@@ -4,7 +4,7 @@ export const useChellengeVariantsStore = defineStore(
   "challengeVariants",
   () => {
     let challenges: any = reactive({});
-    let langs = ref<{ id: number; name: string }[]>([]);
+    let langs = ref<{ id: number; name: string; status: boolean }[]>([]);
     let currentLang = ref("");
     const currentChallenge = () => {
       return challenges[currentLang.value];

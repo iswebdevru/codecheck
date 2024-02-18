@@ -2,6 +2,7 @@
 type Lang = {
   id: number;
   name: string;
+  status?: boolean;
 };
 
 interface Props {
@@ -30,6 +31,21 @@ const selectLang = (item: any) => {
         v-for="item in props.languages"
         :key="item.id"
       >
+        <span v-if="item.status">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            x="0px"
+            y="0px"
+            width="1rem"
+            height="1rem"
+            viewBox="0 0 16 16"
+          >
+            <polygon
+              fill="#00b569"
+              points="5.857,14.844 0.172,9.032 3.031,6.235 5.888,9.156 12.984,2.06 15.812,4.888"
+            ></polygon>
+          </svg>
+        </span>
         <img
           class="languages__img"
           :src="`/langs/${item.name?.toLowerCase()}.svg`"
