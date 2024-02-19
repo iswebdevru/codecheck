@@ -278,7 +278,7 @@ const showSolutions = async () => {
               ></div>
             </Tab>
             <Tab title="Решение">
-              <div v-if="!currentSolutionStatus" class="solution-info">
+              <div v-if="!currentSolutionStatus && user" class="solution-info">
                 <h4 class="solution-info__title">
                   Показать решения этой задачи (количество решений:
                   {{ solutions.Solutions.length }})?
