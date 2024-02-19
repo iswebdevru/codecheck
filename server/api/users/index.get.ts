@@ -4,8 +4,8 @@ export default defineEventHandler(async (event) => {
   const [count, items] = await prisma.$transaction([
     prisma.user.count(),
     prisma.user.findMany({
-      skip: 1 * page,
-      take: 1,
+      skip: 10 * page,
+      take: 10,
       orderBy: {
         id: "desc",
       },

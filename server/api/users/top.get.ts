@@ -1,11 +1,11 @@
 export default defineEventHandler(async (event) => {
   const users = await prisma.user.findMany({
-    take: 10,
     orderBy: {
       solutions: {
         _count: "desc",
       },
     },
+    take: 10,
     include: {
       solutions: {
         where: {

@@ -211,12 +211,12 @@ const check = async () => {
         status: currentSolutionStatus.value?.status === 2 ? 1 : undefined,
       },
     });
+    useState("tabsChallengeLeft").value = "Решение";
     await refreshStatus();
     // refreshStatus();
   }
   await refreshSolutions();
   setStatusSoltion();
-  useState("tabsChallengeLeft").value = "Решение";
   useState("tabsChallengeRight").value = "Вывод";
   finish();
   btnLoading.value = true;
