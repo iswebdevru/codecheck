@@ -202,7 +202,6 @@ const check = async () => {
 
   if (checkStatus.value) {
     await refreshStatus();
-    console.log(currentSolutionStatus.value?.status);
     await $fetch(`/api/solutions/${user.value?.username}`, {
       method: "POST",
       body: {

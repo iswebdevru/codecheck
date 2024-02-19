@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
         where: {
           status: 0,
         },
+
         include: {
           challengeVariant: {
             include: {
