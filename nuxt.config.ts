@@ -59,6 +59,7 @@ export default defineNuxtConfig({
   //     enableRefreshPeriodically: false,
   //   },
   // },
+
   css: [
     "~/assets/css/main.scss",
     "~/assets/css/primevue/themes/codechecktheme/theme.scss",

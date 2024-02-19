@@ -171,6 +171,7 @@ setStatusSoltion();
 const check = async () => {
   start();
   btnLoading.value = false;
+  console.log(currentChallenge().test, currentChallenge().code);
   const resCheck: any = await $fetch("/api/check", {
     method: "POST",
     body: {
@@ -188,6 +189,7 @@ const check = async () => {
     ? (checkStatus.value = true)
     : (checkStatus.value = false);
   btnCheckClicked.value = true;
+  // var b = Buffer.from(resCheck.stdout, "base64");
   output.value = resCheck.stdout;
 
   if (checkStatus.value) {

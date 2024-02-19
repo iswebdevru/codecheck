@@ -6,6 +6,13 @@ export default defineEventHandler(async (event) => {
         _count: "desc",
       },
     },
+    where: {
+      solutions: {
+        some: {
+          status: 0,
+        },
+      },
+    },
     include: {
       _count: {
         select: {

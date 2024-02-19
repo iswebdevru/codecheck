@@ -35,13 +35,13 @@
     "@uiw/codemirror-theme-darcula": "^4.21.21",
     "codemirror": "^6.0.1",
     "highlight.js": "^11.9.0",
+    "jszip": "^3.10.1",
     "lucia": "^3.0.1",
     "markdown-it": "^14.0.0",
     "oslo": "^1.0.3",
     "pinia": "^2.1.7",
     "primevue": "^3.48.1",
     "sass": "^1.70.0",
-    "vue-codemirror": "^6.1.1",
-    "zip-lib": "^0.7.3"
+    "vue-codemirror": "^6.1.1"
   }
 }

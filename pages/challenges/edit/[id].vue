@@ -182,7 +182,7 @@ const check = async () => {
   });
   useState("rightTabs").value = "Вывод";
   finish();
-  output.value = resCheck.stdout;
+  output.value = atob(resCheck.stdout);
   btnLoading.value = true;
 };
 

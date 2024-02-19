@@ -179,13 +179,13 @@ from solution_code import *
 class TestMethods(unittest.TestCase):
 
     def test_function(self):
-        self.assertEqual(названиефункции(1), 2)
+        self.assertEqual(addition(1), 2)
 
 
 if __name__ == "__main__":
     unittest.main()`;
 
-currentChallenge().code = `def названиефункции(n):
+currentChallenge().code = `def addition(n):
  `;
 
 const btnLoading = ref(true);
@@ -195,6 +195,7 @@ const { start, finish } = useLoadingIndicator();
 const check = async () => {
   start();
   btnLoading.value = false;
+  console.log(currentChallenge().test, currentChallenge().code);
   const resCheck: any = await $fetch("/api/check", {
     method: "POST",
     body: {
@@ -205,11 +206,14 @@ const check = async () => {
   });
   useState("rightTabs").value = "Вывод";
   finish();
-  output.value = resCheck.stdout;
+  output.value = new TextDecoder().decode(
+    Uint8Array.from(
+      atob(resCheck.stdout)
+        .split("")
+        .map((x) => x.charCodeAt(0))
+    )
+  );
   btnLoading.value = true;
-
-  // selectedTab.value = "Вывод";
-  // console.log(resCheck);
 };
 
 const challengeName = ref("");
@@ -231,12 +235,6 @@ const addChallenge = async () => {
       })),
     },
   });
-  console.log(
-    Array.from(challenges.value, ([name, value]) => ({
-      name,
-      value,
-    }))
-  );
 };
 </script>
 
