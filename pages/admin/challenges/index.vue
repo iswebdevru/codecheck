@@ -44,6 +44,9 @@ definePageMeta({
   middleware: "admin",
 });
 
+useState("leftTabs").value = "Инструкция";
+useState("rightTabs").value = "Код";
+
 const store = useAdminChellengeVariantsStore();
 const { currentLang, langs, challenges } = storeToRefs(store);
 const { currentChallenge, initChallenges } = store;
@@ -195,7 +198,6 @@ const { start, finish } = useLoadingIndicator();
 const check = async () => {
   start();
   btnLoading.value = false;
-  console.log(currentChallenge().test, currentChallenge().code);
   const resCheck: any = await $fetch("/api/check", {
     method: "POST",
     body: {
@@ -277,7 +279,6 @@ const addChallenge = async () => {
                 <div v-html="renderedMd" class="markdown-body"></div>
               </client-only>
             </Tab>
-            <Tab title="Решение"> Решение </Tab>
           </TabsWrapper>
         </div>
         <div class="challenge__right right">

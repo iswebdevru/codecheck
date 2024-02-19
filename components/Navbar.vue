@@ -46,6 +46,8 @@ const handleMenuItem = (e: any) => {
 
 <style scoped lang="scss">
 .nav {
+  display: flex;
+  align-items: center;
   &__btn {
     display: none;
     z-index: 50;
@@ -53,6 +55,7 @@ const handleMenuItem = (e: any) => {
     height: 25px;
     position: relative;
     background: none;
+    padding: 0;
 
     @media (max-width: 768px) {
       display: block;

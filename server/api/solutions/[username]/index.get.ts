@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
       username: username,
     },
     include: {
-      challengeVariant: true,
       user: true,
     },
   });

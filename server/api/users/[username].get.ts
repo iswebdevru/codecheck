@@ -1,20 +1,28 @@
 export default defineEventHandler(async (event) => {
-  const users = await prisma.user.findMany({
-    take: 10,
+  const username = getRouterParam(event, "username");
+  const users = await prisma.user.findFirst({
     orderBy: {
       solutions: {
         _count: "desc",
       },
     },
+
     include: {
       solutions: {
-        where: {
-          status: 0,
-        },
+        where: { status: 0 },
         include: {
           challengeVariant: {
             include: {
-              Challenge: true,
+              Challenge: {
+                include: {
+                  tags: true,
+                  variants: {
+                    include: {
+                      lang: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },

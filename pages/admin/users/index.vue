@@ -91,7 +91,7 @@ const changePage = async (e: any) => {
     </div>
     <Paginator
       @page="changePage"
-      :rows="1"
+      :rows="10"
       :totalRecords="data.count"
     ></Paginator>
   </div>

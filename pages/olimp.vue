@@ -72,14 +72,17 @@ const { data: users } = useFetch("/api/users/top");
   }
   &__table {
     .first {
+      font-size: 1.2rem;
       font-weight: 800;
-      color: rgb(210, 210, 112);
+      color: rgb(235, 235, 43);
     }
     .second {
+      font-size: 1.1rem;
       font-weight: 700;
       color: rgb(112, 184, 210);
     }
     .third {
+      font-size: 1rem;
       font-weight: 700;
       color: rgb(210, 181, 112);
     }

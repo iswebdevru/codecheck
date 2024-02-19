@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
     update: {
       code: data.code,
       challengeVariantId: data.variantId,
+      status: data.status,
     },
     // include: {
     //   challengeVariant: true,

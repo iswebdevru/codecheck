@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Codemirror, install } from "vue-codemirror";
-
 import { basicSetup } from "codemirror";
 import { darcula, darculaInit } from "@uiw/codemirror-theme-darcula";
 import "@/assets/css/markdown.scss";
@@ -159,7 +158,10 @@ const currentSolutionStatus = computed(() => {
 const setStatusSoltion = () => {
   langs.value.forEach((lang) => {
     userChallengeSolutions.value.variants.forEach((item: any) => {
-      if (lang.name === item.lang.name && item.Solutions[0]?.status === 0) {
+      if (
+        lang.name === item.lang.name &&
+        (item.Solutions[0]?.status === 1 || item.Solutions[0]?.status === 0)
+      ) {
         lang.status = true;
       }
     });
@@ -171,7 +173,6 @@ setStatusSoltion();
 const check = async () => {
   start();
   btnLoading.value = false;
-  console.log(currentChallenge().test, currentChallenge().code);
   const resCheck: any = await $fetch("/api/check", {
     method: "POST",
     body: {
@@ -185,20 +186,29 @@ const check = async () => {
     finish();
     return;
   }
-  resCheck.status.id === 3
-    ? (checkStatus.value = true)
-    : (checkStatus.value = false);
+  // resCheck.status.id === 3
+  //   ? (checkStatus.value = true)
+  //   : (checkStatus.value = false);
+  checkStatus.value = resCheck.status.id === 3;
+
   btnCheckClicked.value = true;
-  // var b = Buffer.from(resCheck.stdout, "base64");
-  output.value = resCheck.stdout;
+  output.value = new TextDecoder().decode(
+    Uint8Array.from(
+      atob(resCheck.stdout)
+        .split("")
+        .map((x) => x.charCodeAt(0))
+    )
+  );
 
   if (checkStatus.value) {
-    // console.log(currentChallenge());
+    await refreshStatus();
+    console.log(currentSolutionStatus.value?.status);
     await $fetch(`/api/solutions/${user.value?.username}`, {
       method: "POST",
       body: {
         code: currentChallenge().code,
         variantId: currentChallenge().id,
+        status: currentSolutionStatus.value?.status === 2 ? 1 : undefined,
       },
     });
     await refreshStatus();
@@ -211,6 +221,7 @@ const check = async () => {
   finish();
   btnLoading.value = true;
 };
+
 const parser = new Markdown({
   // html: true,
 
@@ -245,13 +256,12 @@ const clickSolutionTab = (title: string) => {
 };
 
 const showSolutions = async () => {
-  console.log("fasdf");
   await $fetch(`/api/solutions/${user.value?.username}`, {
     method: "POST",
     body: {
       code: currentChallenge().code,
       variantId: currentChallenge().id,
-      status: 1,
+      status: 2,
     },
   });
   await refreshStatus();

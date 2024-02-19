@@ -182,7 +182,13 @@ const check = async () => {
   });
   useState("rightTabs").value = "Вывод";
   finish();
-  output.value = atob(resCheck.stdout);
+  output.value = new TextDecoder().decode(
+    Uint8Array.from(
+      atob(resCheck.stdout)
+        .split("")
+        .map((x) => x.charCodeAt(0))
+    )
+  );
   btnLoading.value = true;
 };
 
