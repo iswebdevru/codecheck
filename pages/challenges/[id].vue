@@ -314,7 +314,7 @@ const showSolutions = async () => {
                     <h3>{{ solution.user.fio }}</h3>
                     <div class="solution__bottom">
                       <span>
-                        {{ dateFormat.format(new Date(solution.createdAt)) }}
+                        {{ dateFormat.format(new Date(solution.updatedAt)) }}
                       </span>
                       <span>{{ solution.user?.group }}</span>
                     </div>

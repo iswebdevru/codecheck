@@ -6,26 +6,42 @@ const { data: users } = useFetch("/api/users/top");
   <div class="olimp">
     <div class="olimp__container">
       <div class="olimp__body">
-        <table class="table">
+        <div class="olimp__info">
+          <h1 class="olimp__title">КодЧек Олимп</h1>
+          <p class="olimp__text">
+            Поприветсвуйте наш <b>ТОП-10 </b>! Давайте приветствовать наших
+            героев! Они из числа тех, кто наслаждается трудом и считает
+            бездействие гибельным.
+          </p>
+        </div>
+        <table class="olimp__table">
           <thead>
             <tr>
               <th>Место</th>
-              <th>Имя</th>
+              <th>ФИО</th>
               <th>Решено задач</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
               <th>Место</th>
-              <th>Имя</th>
+              <th>ФИО</th>
               <th>Решено задач</th>
             </tr>
           </tfoot>
           <tbody>
-            <tr v-for="user in users" :key="user.id">
-              <td></td>
+            <tr v-for="(user, index) in users" :key="user.id">
+              <td
+                :class="{
+                  first: index + 1 === 1,
+                  second: index + 1 === 2,
+                  third: index + 1 === 3,
+                }"
+              >
+                {{ index + 1 }}
+              </td>
               <td>{{ user.fio }}</td>
-              <td>{{ user.solutions.length }}</td>
+              <td>{{ user._count.solutions }}</td>
             </tr>
           </tbody>
         </table>
@@ -34,4 +50,52 @@ const { data: users } = useFetch("/api/users/top");
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.olimp {
+  &__title {
+    margin: 0;
+  }
+  &__text {
+    line-height: 150%;
+  }
+  &__body {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  }
+  &__container {
+    margin: 0 auto;
+    max-width: var(--width-container);
+    padding-right: 1rem;
+    padding-left: 1rem;
+    overflow: auto;
+  }
+  &__table {
+    .first {
+      font-weight: 800;
+      color: rgb(210, 210, 112);
+    }
+    .second {
+      font-weight: 700;
+      color: rgb(112, 184, 210);
+    }
+    .third {
+      font-weight: 700;
+      color: rgb(210, 181, 112);
+    }
+  }
+}
+
+table {
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+}
+
+th,
+td {
+  border-top: 1px solid var(--color-border-primary);
+  border-bottom: 1px solid var(--color-border-primary);
+  padding: 0.9rem 1rem;
+}
+</style>

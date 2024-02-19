@@ -52,6 +52,7 @@ const handleMenuItem = (e: any) => {
     width: 40px;
     height: 25px;
     position: relative;
+    background: none;
 
     @media (max-width: 768px) {
       display: block;
