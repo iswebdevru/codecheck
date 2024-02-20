@@ -1,75 +1,63 @@
-# Nuxt 3 Minimal Starter
+# КодЧек
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Описание
 
-## Setup
+![Alt text](image.png)
+![Alt text](image-1.png)
+![Alt text](image-2.png)
 
-Make sure to install the dependencies:
+**КодЧек** - платформа для онлайн-практики алгоритмов и задач по программированию.
 
-```bash
-# npm
-npm install
+Перечень основых функциональных возможностей:
 
-# pnpm
-pnpm install
+- Решение алгоритмических задач на разных языках программирования
+- Автоматическое тестирование задач, написанных пользователем
+- Авторизация по данным из д.ркэ.рф
+- Поиск заданий по названию
 
-# yarn
-yarn install
+Для администратора доступно добавление, редактирование и удаление заданий в системе.
 
-# bun
-bun install
-```
+## Технологии
 
-## Development Server
+- JavaScript/TypeScript (Nuxt 3)
+- PostgreSQL
+- [Judge0](https://judge0.com/) (Платформа позволяющая безопасно запускать код в изолированном режиме)
 
-Start the development server on `http://localhost:3000`:
+## Права в приложении:
 
-```bash
-# npm
-npm run dev
+USER - авторизованный пользователь
+ADMIN - обладает всеми возможными привилегиями
 
-# pnpm
-pnpm run dev
+## Развертывание
 
-# yarn
-yarn dev
+### Docker
 
-# bun
-bun run dev
-```
+Проект можно развернуть с помощью Docker. Для упрощения работы с запуском контейнеров созданы два файла, организовывающих работу всех контейнеров: `docker-compose.prod.yml` и `docker-compose.dev.yml`.
 
-## Production
+#### `docker-compose.prod.yml`
 
-Build the application for production:
+Этот файл отвечает за запуск всех контейнеров, необходимых для работы всего приложения, и специально оптимизирован для работы на реальном сервере.
 
-```bash
-# npm
-npm run build
+Чтобы стартовать приложение в режиме `production`, необходимо в корне проекта запустить следующую команду:
 
-# pnpm
-pnpm run build
+`docker compose -f docker-compose.prod.yml up -d --build`
 
-# yarn
-yarn build
+В результате чего на localhost пробросятся 3 порта
 
-# bun
-bun run build
-```
+1. `:80` - само приложение
+2. `:2358` - Judge0
+3. `:5432` - база данных PostgreSQL
 
-Locally preview production build:
+> :information_source: **Примечание**
+>
+> При первом развертывании проекта, необходимо будет создать БД codecheck внутри контейнера, где запущенных postgres, после чего заполнить эту БД с помощью команды `npx prisma migrate deploy` (запускать внутри контейнера, где запущено само приложени
 
-```bash
-# npm
-npm run preview
+#### `docker-compose.dev.yml`
 
-# pnpm
-pnpm run preview
+Второй файл создан с целью ведения локальной разработки на своей машине, поддерживающей Docker. В результате ее работы пробрасывается два порта на localhost:
 
-# yarn
-yarn preview
+1. `:5432` - база данных PostgreSQL
+2. `:15432` - postgresAdmin
+3. `:2358` - Judge0
 
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+> При этом само приложение в режиме разработки, вы должны запускать на хост машине с помощью команды `npm run dev`, а для этого у вас должен быть установлен NodeJS
