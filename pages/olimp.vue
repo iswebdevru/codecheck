@@ -41,7 +41,7 @@ const { data: users } = useFetch("/api/users/top");
                 {{ index + 1 }}
               </td>
               <td>{{ user.fio }}</td>
-              <td>{{ user._count.solutions }}</td>
+              <td>{{ user.solutions }}</td>
             </tr>
           </tbody>
         </table>

@@ -1,35 +1,11 @@
 export default defineEventHandler(async (event) => {
-  const users = await prisma.user.findMany({
-    orderBy: {
-      solutions: {
-        _count: "desc",
-      },
-    },
-    take: 10,
-    include: {
-      solutions: {
-        where: {
-          status: 0,
-        },
-
-        include: {
-          challengeVariant: {
-            include: {
-              Challenge: true,
-            },
-          },
-        },
-      },
-      _count: {
-        select: {
-          solutions: {
-            where: {
-              status: 0,
-            },
-          },
-        },
-      },
-    },
-  });
-  return users;
+  const users =
+    await prisma.$queryRaw`SELECT  "User".fio, COUNT("Solution".id ) AS solutions FROM "User" LEFT JOIN "Solution"  ON "User".username="Solution".username WHERE "Solution".status=0 GROUP BY "User".fio, "User".username ORDER BY solutions DESC LIMIT 10;`;
+  // That's JavaScript moment and that's not defaut
+  //
+  return JSON.parse(
+    JSON.stringify(users, (key, value) =>
+      typeof value === "bigint" ? value.toString() : value
+    )
+  );
 });

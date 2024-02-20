@@ -1,6 +1,6 @@
 <script setup>
 useHead({
-  title: "Главная",
+  title: "Простой и эффективный способ, основанный на практике",
   meta: [
     {
       name: "description",

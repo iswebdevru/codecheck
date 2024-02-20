@@ -161,10 +161,12 @@ const challengesSearched = computed(() => {
   }
   &__title {
     color: var(--color-text-primary);
-    // text-decoration: underline;
     // font-weight: 200;
 
     font-size: 1.5rem;
+    &:hover {
+      text-decoration: 3px underline;
+    }
   }
   &__description {
     margin-top: 1rem;
