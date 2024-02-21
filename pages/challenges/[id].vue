@@ -540,12 +540,19 @@ const showSolutions = async () => {
   }
   &__body {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
     gap: 2rem;
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
 .left {
+  &__name {
+    margin: 0;
+  }
   &__solutions {
     display: flex;
     flex-direction: column;

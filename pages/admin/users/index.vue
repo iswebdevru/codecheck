@@ -43,7 +43,7 @@ const changePage = async (e: any) => {
             <td>{{ user.email }}</td>
             <td>{{ user.role ? "Админ" : "Пользователь" }}</td>
             <td>{{ user?.group }}</td>
-            <td>{{ user?._count.length }}</td>
+            <td>{{ user?._count.solutions }}</td>
             <td>
               <div
                 v-if="authUser?.username !== user.username"
