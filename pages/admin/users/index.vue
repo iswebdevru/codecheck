@@ -10,7 +10,7 @@ definePageMeta({
 });
 
 let page = ref(0);
-const { data, refresh }: any = await useFetch(
+const { data: users, refresh }: any = await useFetch(
   () => `/api/users?page=${page.value}`
 );
 const authUser = useUser();
@@ -18,6 +18,17 @@ const authUser = useUser();
 const changePage = async (e: any) => {
   page.value = e.page;
   refresh();
+};
+
+const deleteUser = async (id: number) => {
+  const data = await $fetch(`/api/users/${id}`, {
+    method: "DELETE",
+  });
+  console.log(data);
+  if (!data) return;
+  users.value = users.value.filter((el: any) => {
+    return el.id !== id;
+  });
 };
 </script>
 
@@ -37,7 +48,7 @@ const changePage = async (e: any) => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in data.users" :key="user.id">
+          <tr v-for="user in users.users" :key="user.id">
             <td>{{ user.fio }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
@@ -66,7 +77,9 @@ const changePage = async (e: any) => {
                     />
                   </svg>
                 </FormButton>
-                <FormButton :background="'var(--color-danger)'"
+                <FormButton
+                  @click="deleteUser(user.id)"
+                  :background="'var(--color-danger)'"
                   ><svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -92,7 +105,7 @@ const changePage = async (e: any) => {
     <Paginator
       @page="changePage"
       :rows="10"
-      :totalRecords="data.count"
+      :totalRecords="users.count"
     ></Paginator>
   </div>
 </template>

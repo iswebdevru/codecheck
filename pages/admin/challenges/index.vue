@@ -238,6 +238,22 @@ const addChallenge = async () => {
     },
   });
 };
+
+const parseinp = ref("https://api.codechick.io/tasks/");
+
+const handleParse = async () => {
+  const data: any = await $fetch(parseinp.value);
+  if (!data.title) return;
+  challengeName.value = data.title;
+  challengeDescription.value = data.description;
+  data.subtasks.forEach((element: any) => {
+    if (element.language.title === currentLang.value) {
+      currentChallenge().mdInstructrion = element.description;
+      currentChallenge().code = element.start_code;
+      currentChallenge().test = element.test_code;
+    }
+  });
+};
 </script>
 
 <template>
@@ -356,6 +372,21 @@ const addChallenge = async () => {
                   >Добавить задачу</FormButton
                 >
               </div>
+              <div class="parse">
+                <TextInput
+                  placeholder="Ссылка на задачу, которую надо спарсить"
+                  name="parseinp"
+                  v-model="parseinp"
+                  id="parseinp"
+                ></TextInput>
+                <FormButton
+                  @click="handleParse"
+                  background="var(--color-primary)"
+                  color="var(--color-text-primary)"
+                  class="right__btn"
+                  >Спарсить задачу</FormButton
+                >
+              </div>
             </template>
           </TabsWrapper>
         </div>
@@ -368,6 +399,13 @@ const addChallenge = async () => {
 <style lang="scss">
 :deep(.cm-editor) {
   border-radius: 5px;
+}
+
+.parse {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
 }
 
 .challenge {
@@ -389,7 +427,10 @@ const addChallenge = async () => {
   }
   &__body {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
     gap: 2rem;
   }
 }

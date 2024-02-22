@@ -346,8 +346,6 @@ const updateChallenge = async () => {
 </template>
 
 <style lang="scss">
-// @use "@/assets/css/markdown" as *;
-
 :deep(.cm-editor) {
   border-radius: 5px;
 }
@@ -371,7 +369,10 @@ const updateChallenge = async () => {
   }
   &__body {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
     gap: 2rem;
   }
 }
