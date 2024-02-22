@@ -242,8 +242,11 @@ const addChallenge = async () => {
 const parseinp = ref("https://api.codechick.io/tasks/");
 
 const handleParse = async () => {
-  const data: any = await $fetch(parseinp.value, {
-    mode: "no-cors",
+  const data: any = await $fetch("/api/parse", {
+    method: "POST",
+    body: {
+      url: parseinp.value,
+    },
   });
   if (!data.title) return;
   challengeName.value = data.title;
