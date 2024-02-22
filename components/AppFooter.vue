@@ -42,7 +42,7 @@
 .footer {
   margin-top: 2rem;
   background: var(--color-bg-third);
-  padding: 2rem;
+  padding: 2rem 0;
   &__developer {
     display: flex;
     align-items: center;

@@ -316,6 +316,10 @@ const showSolutions = async () => {
                   currentSolutionStatus || currentSolutionStatus?.status === 0
                 "
               >
+                <div v-if="solutions.Solutions.length === 0" class="">
+                  Пока нет решений.
+                </div>
+
                 <div
                   v-for="solution in solutions.Solutions"
                   :key="solution.id"

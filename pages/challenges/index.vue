@@ -4,7 +4,13 @@ import type { Challenge } from "@prisma/client";
 useHead({
   title: "Задания",
 });
-const { data: challenges } = await useFetch("/api/challenges");
+const incomplete = ref(false);
+const search = ref("");
+const page = ref(1);
+const { data: challenges } = await useFetch(
+  () =>
+    `/api/challenges/?name=${search.value}&incomplete=${incomplete.value}&page=${page.value}`
+);
 
 const user = useUser();
 const deleteChallenge = async (id: number) => {
@@ -21,13 +27,15 @@ const updateChallenge = (id: number) => {
   navigateTo(`/challenges/edit/${id}`);
 };
 
-const search = ref("");
+const handlePaginate = () => {
+  page.value += 1;
+};
 
-const challengesSearched = computed(() => {
-  return challenges.value.filter((item: any) => {
-    return item.name.toLowerCase().indexOf(search.value.toLowerCase()) > -1;
-  });
-});
+// const challengesSearched = computed(() => {
+//   return challenges.value.filter((item: any) => {
+//     return item.name.toLowerCase().indexOf(search.value.toLowerCase()) > -1;
+//   });
+// });
 </script>
 
 <template>
@@ -40,13 +48,21 @@ const challengesSearched = computed(() => {
           name="search"
           id="search"
         ></TextInput>
+        <div v-if="user" class="">
+          <Checkbox
+            input-id="incomplete"
+            v-model="incomplete"
+            :binary="true"
+          ></Checkbox>
+          <label for="incomplete"> Показать только нерешенные</label>
+        </div>
       </div>
       <div class="challenges__body">
         <!-- <h1 class="">Задания</h1> -->
         <div class="challenges__items">
           <TransitionGroup name="fade">
             <div
-              v-for="item in challengesSearched"
+              v-for="item in challenges"
               :key="item.id"
               class="challenges__item item"
             >
@@ -81,12 +97,19 @@ const challengesSearched = computed(() => {
                 >
                 <FormButton
                   @click.prevent="deleteChallenge(item.id)"
+                  color="var(--color-text-primary)"
                   background="var(--color-danger)"
                   >Удалить</FormButton
                 >
               </div>
             </div>
           </TransitionGroup>
+
+          <FormButton
+            @click.prevent="handlePaginate"
+            v-if="challenges.length === 10"
+            >Загрузить еще</FormButton
+          >
         </div>
       </div>
     </div>
@@ -105,6 +128,9 @@ const challengesSearched = computed(() => {
 }
 .challenges {
   &__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     // box-shadow: 0 0 10px rgba(0, 0, 0, 0.086);
     // border-radius: var(--border-radius);
     padding: 1rem 1rem;
@@ -118,7 +144,7 @@ const challengesSearched = computed(() => {
     padding-right: 1rem;
     padding-left: 1rem;
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 4fr;
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;

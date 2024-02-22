@@ -237,6 +237,8 @@ const addChallenge = async () => {
       })),
     },
   });
+  if (!data) return;
+  navigateTo(`/challenges/${data.id}`);
 };
 
 const parseinp = ref("https://api.codechick.io/tasks/");
