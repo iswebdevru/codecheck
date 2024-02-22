@@ -101,7 +101,7 @@ const handleMenuItem = (e: any) => {
     gap: 1rem;
     font-size: 1.2rem;
     list-style: none;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     transition: transform 0.3s ease 0s;
 
     @media (max-width: 768px) {

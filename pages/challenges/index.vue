@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import type { Challenge } from "@prisma/client";
 
-useHead({
+useSeoMeta({
   title: "Задания",
+  ogTitle: "Задания",
+  description:
+    "КодЧек - это платформа для онлайн-практики алгоритмов и задач по программированию. Здесь размещено большое количество задач разного уровня сложности, которые помогают улучшить навыки программирования и подготовиться к техническим собеседованиям.",
+  ogDescription:
+    "КодЧек - это платформа для онлайн-практики алгоритмов и задач по программированию. Здесь размещено большое количество задач разного уровня сложности, которые помогают улучшить навыки программирования и подготовиться к техническим собеседованиям.",
+  ogImage: "https://кодчек.ркэ.рф/logo.png",
+  ogType: "website",
 });
 const incomplete = ref(false);
 const search = ref("");
@@ -144,7 +151,7 @@ const handlePaginate = () => {
     padding-right: 1rem;
     padding-left: 1rem;
     display: grid;
-    grid-template-columns: 1fr 4fr;
+    grid-template-columns: minmax(250px, 1fr) 4fr;
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
