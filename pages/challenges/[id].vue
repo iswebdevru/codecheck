@@ -471,7 +471,6 @@ const showSolutions = async () => {
     color: var(--color-text-secondary);
     font-weight: 500;
     padding: 0.5rem 1rem;
-    margin: 0;
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
   }

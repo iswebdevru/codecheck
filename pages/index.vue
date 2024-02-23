@@ -19,8 +19,10 @@ definePageMeta({ auth: true });
         <img src="@/assets/img/home.svg" alt="" />
       </div>
       <div class="home__about">
-        <h1>Простой и эффективный способ, основанный на практике</h1>
-        <p>
+        <h1 class="home__title">
+          Простой и эффективный способ, основанный на практике
+        </h1>
+        <p class="home__description">
           <span>КодЧек</span> - это платформа для онлайн-практики алгоритмов и
           задач по программированию. Здесь размещено большое количество задач
           разного уровня сложности, которые помогают улучшить навыки
@@ -36,6 +38,9 @@ definePageMeta({ auth: true });
 <style scoped lang="scss">
 .home {
   margin-top: 2rem;
+  &__title {
+    margin-bottom: 1rem;
+  }
   &__img {
     img {
       width: 100%;

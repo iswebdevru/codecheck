@@ -10,21 +10,10 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: false },
+
   // build: {
   //    transpile: ["jsonwebtoken"],
   // },
-
-  // nitro: {
-  //   storage: {
-  //     checks: {
-  //       driver: "fs",
-  //       base: "./checks",
-  //     },
-  //   },
-  // },
-  experimental: {
-    // sharedPrerenderData: true,
-  },
 
   modules: ["nuxt-simple-robots", "@pinia/nuxt", "nuxt-primevue"],
   robots: {
@@ -32,36 +21,15 @@ export default defineNuxtConfig({
     credits: false,
   },
   primevue: {
-    options: {},
+    cssLayerOrder: "reset,primevue",
     components: {
-      // include: ["MultiSelect", "Paginator"],
+      include: ["Multiselect", "Checkbox", "Paginator"],
     },
   },
-  // auth: {
-  //   provider: {
-  //     type: "local",
-  //     endpoints: {
-  //       getSession: { path: "/user" },
-  //     },
-
-  //     // pages: {
-  //     //   login: "/login",
-  //     // },
-  //     token: {
-  //       signInResponseTokenPointer: "/token/accessToken",
-  //     },
-  //   },
-  //   session: {
-  //     // Whether to refresh the session every time the browser window is refocused.
-  //     enableRefreshOnWindowFocus: true,
-
-  //     // Whether to refresh the session every `X` milliseconds. Set this to `false` to turn it off. The session will only be refreshed if a session already exists.
-  //     enableRefreshPeriodically: false,
-  //   },
-  // },
 
   css: [
     "~/assets/css/main.scss",
+    // "primevue/resources/themes/aura-light-green/theme.css",
     "~/assets/css/primevue/themes/codechecktheme/theme.scss",
   ],
   postcss: {

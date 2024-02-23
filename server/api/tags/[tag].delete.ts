@@ -1,10 +1,10 @@
 export default defineEventHandler(async (event) => {
   if (event.context.user?.role !== 1 || !event.context.user) return;
-  const id = getRouterParam(event, "id");
-  const user = await prisma.user.delete({
+  const tagId = getRouterParam(event, "tag");
+  const tag = await prisma.tag.delete({
     where: {
-      id: Number(id),
+      id: Number(tagId),
     },
   });
-  return user;
+  return tag;
 });

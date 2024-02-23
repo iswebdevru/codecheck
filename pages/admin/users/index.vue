@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { User } from "@prisma/client";
 import Paginator from "primevue/paginator";
 
 useHead({
@@ -20,16 +21,29 @@ const changePage = async (e: any) => {
   refresh();
 };
 
+const roles = ref([
+  {
+    name: "Пользователь",
+  },
+  {
+    name: "Админ",
+  },
+]);
+
+const updateUser = async (username: string) => {
+  navigateTo(`/admin/users/edit/${username}`);
+};
+
 const deleteUser = async (id: number) => {
   const data = await $fetch(`/api/users/${id}`, {
     method: "DELETE",
   });
-  console.log(data);
   if (!data) return;
-  users.value = users.value.filter((el: any) => {
+  users.value.users = users.value.users.filter((el: any) => {
     return el.id !== id;
   });
 };
+// const selectedRole = ref();
 </script>
 
 <template>
@@ -52,7 +66,9 @@ const deleteUser = async (id: number) => {
             <td>{{ user.fio }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.role ? "Админ" : "Пользователь" }}</td>
+            <td>
+              {{ roles[user.role].name }}
+            </td>
             <td>{{ user?.group }}</td>
             <td>{{ user?._count.solutions }}</td>
             <td>
@@ -60,7 +76,9 @@ const deleteUser = async (id: number) => {
                 v-if="authUser?.username !== user.username"
                 class="users__actions"
               >
-                <FormButton :background="'var(--color-warning)'"
+                <FormButton
+                  @click.prevent="updateUser(user.username)"
+                  :background="'var(--color-warning)'"
                   ><svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
