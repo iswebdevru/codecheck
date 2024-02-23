@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   primevue: {
     cssLayerOrder: "reset,primevue",
     components: {
-      include: ["Multiselect", "Checkbox", "Paginator"],
+      include: ["Multiselect", "Checkbox", "Paginator", "Dropdown"],
     },
   },
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { User } from "@prisma/client";
 import Paginator from "primevue/paginator";
 
 useHead({
@@ -43,7 +42,6 @@ const deleteUser = async (id: number) => {
     return el.id !== id;
   });
 };
-// const selectedRole = ref();
 </script>
 
 <template>

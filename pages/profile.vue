@@ -72,10 +72,6 @@ const { data: challenges } = await useFetch(
 </template>
 
 <style scoped lang="scss">
-* {
-  margin: 0;
-  padding: 0;
-}
 .profile {
   &__name {
     font-weight: 500;
