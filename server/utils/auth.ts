@@ -2,8 +2,7 @@ import { Lucia } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { PrismaClient } from "@prisma/client";
 
-// import { webcrypto } from "crypto";
-// globalThis.crypto = webcrypto as Crypto;
+import { OAuth2Client } from "oslo/oauth2";
 
 export const prisma = new PrismaClient();
 
@@ -25,6 +24,19 @@ export const lucia = new Lucia(adapter, {
     };
   },
 });
+
+const authorizeEndpoint = process.env.MOODLE_LOGIN_ROUTE;
+const tokenEndpoint = process.env.MOODLE_TOKEN_ROUTE;
+
+const clientId = process.env.MOODLE_CLIENTID;
+export const oauth2Client = new OAuth2Client(
+  clientId!,
+  authorizeEndpoint!,
+  tokenEndpoint!,
+  {
+    redirectURI: process.env.REDIRECT_URL!,
+  }
+);
 
 declare module "lucia" {
   interface Register {

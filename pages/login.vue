@@ -30,6 +30,10 @@ const submitForm = async () => {
 useHead({
   title: "Логин",
 });
+
+// const loginWithMoodle = () => {
+//   navigateTo("/login/moodle/", { external: true });
+// };
 </script>
 
 <template>
@@ -39,7 +43,7 @@ useHead({
       <form @submit.prevent="submitForm" class="form__body">
         <h1 class="form__title">Авторизация</h1>
 
-        <div class="form__item">
+        <!-- <div class="form__item">
           <LabelInput for="user">Логин</LabelInput>
           <TextInput id="user" name="username" v-model="username"></TextInput>
         </div>
@@ -52,14 +56,15 @@ useHead({
             v-model="password"
           ></TextInput>
         </div>
-        <p>
-          Авторизация по данным <a href="https://д.ркэ.рф"><u>д.ркэ.рф</u></a>
-        </p>
+
         <FormButton
           :loading="btnLoading"
           type="submit"
           :background="'var(--color-primary)'"
           >Войти</FormButton
+        > -->
+        <NuxtLink class="form__moodle" to="/login/moodle/" :external="true"
+          >Войти с помощью д.ркэ.рф</NuxtLink
         >
         <p class="form__error">{{ error }}</p>
       </form>
@@ -70,6 +75,13 @@ useHead({
 <style scoped lang="scss">
 .form {
   margin-top: 2rem;
+  &__moodle {
+    background: var(--color-primary);
+    color: var(--color-text-secondary);
+    padding: 0.5rem 1rem;
+    text-align: center;
+    border-radius: var(--border-radius);
+  }
   &__error {
     color: var(--color-danger);
   }
