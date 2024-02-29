@@ -5,6 +5,12 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "ru",
       },
+      meta: [
+        {
+          name: "yandex-verification",
+          content: "abcf376d3252e8d9",
+        },
+      ],
       link: [
         {
           rel: "apple-touch-icon",
