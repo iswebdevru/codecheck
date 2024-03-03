@@ -37,6 +37,14 @@ import {
 } from "@codemirror/autocomplete";
 import { lintKeymap } from "@codemirror/lint";
 
+import {
+  tsParticles,
+  type Container,
+  type ISourceOptions,
+} from "@tsparticles/engine";
+import { loadEmojiShape } from "@tsparticles/shape-emoji";
+import { loadFull } from "tsparticles"; // or whichever bundle you wish to use
+
 const route = useRoute();
 
 const store = useChellengeVariantsStore();
@@ -46,6 +54,13 @@ await initChallengeVariants(route.params.id as string);
 
 useHead({
   title: `${challenge.value.name}`,
+});
+
+useSeoMeta({
+  title: `${challenge.value.name}`,
+  ogTitle: `${challenge.value.name}`,
+  description: `${challenge.value.description}`,
+  ogDescription: `${challenge.value.description}`,
 });
 
 useState("tabsChallengeLeft").value = "Инструкция";
@@ -265,9 +280,150 @@ const showSolutions = async () => {
   });
   await refreshStatus();
 };
+
+// const options: ISourceOptions = {
+//   fullScreen: {
+//     zIndex: 10,
+//   },
+//   particles: {
+//     // color: {
+//     //   value: ["#FFFFFF", "#FFd700"],
+//     // },
+//     move: {
+//       direction: "bottom",
+//       enable: true,
+//       // outModes: {
+//       //   default: "destroy",
+//       //   top: "none",
+//       // },
+//       size: true,
+//       speed: {
+//         min: 1,
+//         max: 10,
+//       },
+//     },
+//     number: {
+//       value: 500,
+//       density: {
+//         enable: true,
+//         // area: 800,
+//       },
+//     },
+//     opacity: {
+//       value: 1,
+//       animation: {
+//         enable: false,
+//         startValue: "max",
+//         destroy: "min",
+//         speed: 0.3,
+//         sync: true,
+//       },
+//     },
+//     rotate: {
+//       value: {
+//         min: 0,
+//         max: 360,
+//       },
+//       direction: "random",
+//       move: true,
+//       animation: {
+//         enable: true,
+//         speed: 60,
+//       },
+//     },
+//     tilt: {
+//       direction: "random",
+//       enable: true,
+//       move: true,
+//       value: {
+//         min: 0,
+//         max: 360,
+//       },
+//       animation: {
+//         enable: true,
+//         speed: 100,
+//       },
+//     },
+//     shape: {
+//       type: ["square", "emoji"],
+//       options: {
+//         emoji: {
+//           particles: {
+//             size: {
+//               value: 15,
+//             },
+//           },
+//           value: ["❤️", "🍀", "🔥", "🦄", "🤘"],
+//         },
+//       },
+//     },
+//     size: {
+//       value: {
+//         min: 2,
+//         max: 10,
+//       },
+//     },
+//     // life: {
+//     //   duration: {
+//     //     sync: true,
+//     //     value: 5,
+//     //   },
+//     //   count: 10,
+//     // },
+//     roll: {
+//       darken: {
+//         enable: true,
+//         value: 30,
+//       },
+//       enlighten: {
+//         enable: true,
+//         value: 30,
+//       },
+//       enable: true,
+//       speed: {
+//         min: 15,
+//         max: 25,
+//       },
+//     },
+//     wobble: {
+//       distance: 30,
+//       enable: true,
+//       move: true,
+//       speed: {
+//         min: -15,
+//         max: 15,
+//       },
+//     },
+//   },
+// };
+// const particlesLoaded = useState("__nuxt_particles_loaded", () => false);
+// const container = ref<Container | undefined>(undefined);
+// onMounted(async () => {
+//   if (!particlesLoaded.value) {
+//     tsParticles.init();
+//     await loadFull(tsParticles);
+//     particlesLoaded.value = true;
+//   }
+
+//   const particlesContainer = await tsParticles.load({
+//     id: "tsparticles",
+//     options: options,
+//   });
+//   if (particlesContainer) {
+//     container.value = particlesContainer;
+//   }
+// });
+// onUnmounted(() => {
+//   if (!container.value) {
+//     return;
+//   }
+//   container.value.destroy();
+// });
 </script>
 
 <template>
+  <!-- <div id="tsparticles"></div> -->
+  <!-- <button @click="sfd">fffffffff</button> -->
   <div class="challenge">
     <div class="challenge__container">
       <div class="challenge__body">

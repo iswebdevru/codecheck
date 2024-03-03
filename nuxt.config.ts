@@ -21,7 +21,7 @@ export default defineNuxtConfig({
           rel: "icon",
           sizes: "32x32",
           type: "image/png",
-          href: "favicon-32x32.png",
+          href: "/favicon-32x32.png",
         },
         {
           rel: "icon",
@@ -41,10 +41,12 @@ export default defineNuxtConfig({
   // },
 
   modules: ["nuxt-simple-robots", "@pinia/nuxt", "nuxt-primevue"],
+
   robots: {
     disallow: ["/admin/*"],
     credits: false,
   },
+
   primevue: {
     cssLayerOrder: "reset,primevue",
     components: {
@@ -57,9 +59,12 @@ export default defineNuxtConfig({
     // "primevue/resources/themes/aura-light-green/theme.css",
     "~/assets/css/primevue/themes/codechecktheme/theme.scss",
   ],
+
   postcss: {
     plugins: {
       autoprefixer: {},
     },
   },
+
+  plugins: ["~/plugins/particle-loader.client.ts"],
 });

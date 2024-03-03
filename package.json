@@ -32,6 +32,9 @@
     "@lucia-auth/adapter-prisma": "^4.0.0",
     "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "5.9.0",
+    "@tsparticles/engine": "^3.3.0",
+    "@tsparticles/shape-emoji": "^3.3.0",
+    "@tsparticles/vue3": "^3.0.0",
     "@uiw/codemirror-theme-darcula": "^4.21.21",
     "codemirror": "^6.0.1",
     "highlight.js": "^11.9.0",
@@ -42,6 +45,7 @@
     "pinia": "^2.1.7",
     "primevue": "^3.48.1",
     "sass": "^1.70.0",
+    "tsparticles": "^3.3.0",
     "vue-codemirror": "^6.1.1"
   }
 }
