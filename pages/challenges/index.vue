@@ -14,9 +14,15 @@ useSeoMeta({
 const incomplete = ref(false);
 const search = ref("");
 const page = ref(1);
+const fetchingChallenges = ref(false);
 const { data: challenges } = await useFetch(
   () =>
-    `/api/challenges/?name=${search.value}&incomplete=${incomplete.value}&page=${page.value}`
+    `/api/challenges/?name=${search.value}&incomplete=${incomplete.value}&page=${page.value}`,
+  {
+    onResponse: () => {
+      fetchingChallenges.value = true;
+    },
+  }
 );
 
 const user = useUser();
@@ -43,6 +49,31 @@ const handlePaginate = () => {
 //     return item.name.toLowerCase().indexOf(search.value.toLowerCase()) > -1;
 //   });
 // });
+
+onMounted(() => {
+  document.addEventListener("scroll", (e: any) => {
+    if (
+      e.target.documentElement.scrollHeight -
+        (e.target.documentElement.scrollTop + window.innerHeight) <
+      100
+    ) {
+      console.log("Подгружаем ещё задания..");
+      if (!fetchingChallenges.value) page.value += 1;
+    }
+  });
+});
+onUnmounted(() => {
+  document.addEventListener("scroll", (e: any) => {
+    if (
+      e.target.documentElement.scrollHeight -
+        (e.target.documentElement.scrollTop + window.innerHeight) <
+      100
+    ) {
+      console.log("Подгружаем ещё задания..");
+      if (!fetchingChallenges.value) page.value += 1;
+    }
+  });
+});
 </script>
 
 <template>
@@ -112,11 +143,11 @@ const handlePaginate = () => {
             </div>
           </TransitionGroup>
 
-          <FormButton
+          <!-- <FormButton
             @click.prevent="handlePaginate"
             v-if="challenges.length === 10"
             >Загрузить еще</FormButton
-          >
+          > -->
         </div>
       </div>
     </div>
