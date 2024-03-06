@@ -41,7 +41,7 @@ const challengesFetcher = async (
   );
 
   return {
-    pageData: data || [],
+    pageData: data,
     cursor: pageParam + 1,
   };
 };
@@ -49,6 +49,7 @@ const challengesFetcher = async (
 const { data, fetchNextPage, hasNextPage, isFetching, isLoading, suspense } =
   useInfiniteQuery({
     initialPageParam: 0,
+
     queryKey: ["challenges", search, incomplete],
     queryFn: (data) => challengesFetcher(data, search, incomplete),
     getNextPageParam: (lastPage) => {
@@ -60,8 +61,17 @@ function intersectionObserver() {
   const { stop } = useIntersectionObserver(
     () => refChallenges.value[refChallenges.value.length - 1],
     ([{ isIntersecting }], observerElement) => {
-      if (isIntersecting && refChallenges.value.length % 10 === 0)
-        fetchNextPage(), stop(), intersectionObserver();
+      // console.log(hasNextPage.value);
+      if (
+        isIntersecting &&
+        data.value?.pages[data.value?.pages.length - 1].pageData.length ===
+          10 &&
+        !isFetching.value
+      ) {
+        fetchNextPage();
+        stop();
+        intersectionObserver();
+      }
     }
   );
 }
@@ -148,7 +158,7 @@ onMounted(() => {
               </div>
             </template>
           </component>
-          <div v-show="isLoading" class="challenges__loader">
+          <div v-show="isLoading || isFetching" class="challenges__loader">
             <span class="loader"></span>
           </div>
         </div>
@@ -193,6 +203,8 @@ onMounted(() => {
   &__loader {
     display: flex;
     justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
   }
   &__aside {
     display: flex;
