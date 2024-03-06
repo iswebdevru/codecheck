@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { Challenge } from "@prisma/client";
+import { useInfiniteQuery } from "@tanstack/vue-query";
+import { TransitionGroup } from "vue";
 
 useSeoMeta({
   title: "Задания",
@@ -13,13 +15,20 @@ useSeoMeta({
 });
 const incomplete = ref(false);
 const search = ref("");
-const page = ref(1);
-const fetchingChallenges = ref(false);
-const { data: challenges } = await useFetch(
+const page = ref(0);
+const fetchingChallenges = ref(true);
+const refChallenges = ref();
+
+const { data: challenges, pending } = await useFetch(
   () =>
     `/api/challenges/?name=${search.value}&incomplete=${incomplete.value}&page=${page.value}`,
   {
-    onResponse: () => {
+    onResponse: (data) => {
+      if (data.response._data.length < 10) {
+        fetchingChallenges.value = false;
+        return;
+      }
+
       fetchingChallenges.value = true;
     },
   }
@@ -40,39 +49,52 @@ const updateChallenge = (id: number) => {
   navigateTo(`/challenges/edit/${id}`);
 };
 
-const handlePaginate = () => {
-  page.value += 1;
+const challengesFetcher = async (
+  { pageParam = 0 },
+  search: Ref<string>,
+  incomplete: Ref<boolean>
+) => {
+  const data = await $fetch(
+    `/api/challenges/?name=${search.value}&incomplete=${incomplete.value}&page=${pageParam}`
+  );
+
+  return {
+    pageData: data || [],
+    cursor: pageParam + 1,
+  };
 };
 
-// const challengesSearched = computed(() => {
-//   return challenges.value.filter((item: any) => {
-//     return item.name.toLowerCase().indexOf(search.value.toLowerCase()) > -1;
-//   });
-// });
+const { data, fetchNextPage, hasNextPage, isFetching, isLoading, suspense } =
+  useInfiniteQuery({
+    initialPageParam: 0,
+    queryKey: ["challenges", search, incomplete],
+    queryFn: (data) => challengesFetcher(data, search, incomplete),
+    getNextPageParam: (lastPage) => {
+      return lastPage.cursor;
+    },
+  });
 
-onMounted(() => {
-  document.addEventListener("scroll", (e: any) => {
-    if (
-      e.target.documentElement.scrollHeight -
-        (e.target.documentElement.scrollTop + window.innerHeight) <
-      100
-    ) {
-      console.log("Подгружаем ещё задания..");
-      if (!fetchingChallenges.value) page.value += 1;
+function intersectionObserver() {
+  const { stop } = useIntersectionObserver(
+    () => refChallenges.value[refChallenges.value.length - 1],
+    ([{ isIntersecting }], observerElement) => {
+      if (isIntersecting && refChallenges.value.length % 10 === 0)
+        fetchNextPage(), stop(), intersectionObserver();
     }
-  });
+  );
+}
+watch(refChallenges, () => {
+  intersectionObserver();
 });
-onUnmounted(() => {
-  document.addEventListener("scroll", (e: any) => {
-    if (
-      e.target.documentElement.scrollHeight -
-        (e.target.documentElement.scrollTop + window.innerHeight) <
-      100
-    ) {
-      console.log("Подгружаем ещё задания..");
-      if (!fetchingChallenges.value) page.value += 1;
-    }
-  });
+
+onServerPrefetch(async () => {
+  await suspense();
+});
+
+const mounted = ref(false);
+const component = computed(() => (mounted.value ? TransitionGroup : "div"));
+onMounted(() => {
+  mounted.value = true;
 });
 </script>
 
@@ -96,58 +118,57 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="challenges__body">
-        <!-- <h1 class="">Задания</h1> -->
         <div class="challenges__items">
-          <TransitionGroup name="fade">
-            <div
-              v-for="item in challenges"
-              :key="item.id"
-              class="challenges__item item"
-            >
-              <NuxtLink :to="`/challenges/${item.id}`" class="item__title">{{
-                item.name
-              }}</NuxtLink>
-              <p class="item__description">{{ item.description }}</p>
-              <div class="item__bottom">
-                <div v-if="item.tags" class="item__tags">
-                  <span
-                    v-for="tag in item.tags"
-                    :key="tag.id"
-                    class="item__tag"
-                    >{{ tag.name }}</span
+          <component :is="component" tag="div" name="fade">
+            <template v-for="(page, index) in data?.pages" :key="index">
+              <div
+                ref="refChallenges"
+                v-for="item in page.pageData"
+                :key="item.id"
+                class="challenges__item item"
+              >
+                <NuxtLink :to="`/challenges/${item.id}`" class="item__title">{{
+                  item.name
+                }}</NuxtLink>
+                <p class="item__description">{{ item.description }}</p>
+                <div class="item__bottom">
+                  <div v-if="item.tags" class="item__tags">
+                    <span
+                      v-for="tag in item.tags"
+                      :key="tag.id"
+                      class="item__tag"
+                      >{{ tag.name }}</span
+                    >
+                  </div>
+                  <div class="item__langs">
+                    <img
+                      class="item__lang-img"
+                      v-for="lang in item.variants"
+                      :src="`/langs/${lang.lang.name?.toLowerCase()}.svg`"
+                      :alt="lang.lang.name"
+                    />
+                  </div>
+                </div>
+                <div v-if="user?.role === 1" class="item__controls">
+                  <FormButton
+                    @click.prevent="updateChallenge(item.id)"
+                    background="var(--color-warning)"
+                    color="var(--color-text-primary)"
+                    >Редактировать</FormButton
+                  >
+                  <FormButton
+                    @click.prevent="deleteChallenge(item.id)"
+                    color="var(--color-text-primary)"
+                    background="var(--color-danger)"
+                    >Удалить</FormButton
                   >
                 </div>
-                <div class="item__langs">
-                  <img
-                    class="item__lang-img"
-                    v-for="lang in item.variants"
-                    :src="`/langs/${lang.lang.name?.toLowerCase()}.svg`"
-                    alt=""
-                  />
-                </div>
               </div>
-              <div v-if="user?.role === 1" class="item__controls">
-                <FormButton
-                  @click.prevent="updateChallenge(item.id)"
-                  background="var(--color-warning)"
-                  color="var(--color-text-primary)"
-                  >Редактировать</FormButton
-                >
-                <FormButton
-                  @click.prevent="deleteChallenge(item.id)"
-                  color="var(--color-text-primary)"
-                  background="var(--color-danger)"
-                  >Удалить</FormButton
-                >
-              </div>
-            </div>
-          </TransitionGroup>
-
-          <!-- <FormButton
-            @click.prevent="handlePaginate"
-            v-if="challenges.length === 10"
-            >Загрузить еще</FormButton
-          > -->
+            </template>
+          </component>
+          <div v-show="isLoading" class="challenges__loader">
+            <span class="loader"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -155,6 +176,28 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+.loader {
+  width: 2rem;
+  height: 2rem;
+  border-width: 2px;
+  border-style: solid;
+  // position: absolute;
+  // border: 5px solid black;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -165,6 +208,10 @@ onUnmounted(() => {
   opacity: 0;
 }
 .challenges {
+  &__loader {
+    display: flex;
+    justify-content: center;
+  }
   &__aside {
     display: flex;
     flex-direction: column;
@@ -189,7 +236,8 @@ onUnmounted(() => {
     }
     // gap: 2rem;
   }
-  &__items {
+  //
+  &__items > div {
     display: grid;
     // grid-template-rows: auto;
     row-gap: 2rem;

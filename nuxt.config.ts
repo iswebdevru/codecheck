@@ -40,7 +40,12 @@ export default defineNuxtConfig({
   //    transpile: ["jsonwebtoken"],
   // },
 
-  modules: ["nuxt-simple-robots", "@pinia/nuxt", "nuxt-primevue"],
+  modules: [
+    "nuxt-simple-robots",
+    "@pinia/nuxt",
+    "nuxt-primevue",
+    "@vueuse/nuxt",
+  ],
 
   robots: {
     disallow: ["/admin/*"],
@@ -66,5 +71,5 @@ export default defineNuxtConfig({
     },
   },
 
-  plugins: ["~/plugins/particle-loader.client.ts"],
+  plugins: ["~/plugins/particle-loader.client.ts", "~/plugins/vue-query.ts"],
 });
