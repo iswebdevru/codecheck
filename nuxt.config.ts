@@ -48,7 +48,7 @@ export default defineNuxtConfig({
   ],
 
   robots: {
-    disallow: ["/admin/*"],
+    disallow: ["/admin/*", "/login", "/profile"],
     credits: false,
   },
 

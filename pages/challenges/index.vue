@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Challenge } from "@prisma/client";
-import { useInfiniteQuery } from "@tanstack/vue-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/vue-query";
 import { TransitionGroup } from "vue";
 
 useSeoMeta({
@@ -15,34 +15,16 @@ useSeoMeta({
 });
 const incomplete = ref(false);
 const search = ref("");
-const page = ref(0);
-const fetchingChallenges = ref(true);
 const refChallenges = ref();
-
-const { data: challenges, pending } = await useFetch(
-  () =>
-    `/api/challenges/?name=${search.value}&incomplete=${incomplete.value}&page=${page.value}`,
-  {
-    onResponse: (data) => {
-      if (data.response._data.length < 10) {
-        fetchingChallenges.value = false;
-        return;
-      }
-
-      fetchingChallenges.value = true;
-    },
-  }
-);
-
+const queryClient = useQueryClient();
 const user = useUser();
+
 const deleteChallenge = async (id: number) => {
   const data = await $fetch(`/api/challenges/${id}`, {
     method: "DELETE",
   });
   if (data) {
-    challenges.value = challenges.value.filter((el: Challenge) => {
-      return el.id !== id;
-    });
+    queryClient.invalidateQueries({ queryKey: ["challenges"] });
   }
 };
 const updateChallenge = (id: number) => {

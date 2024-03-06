@@ -63,7 +63,7 @@ const { data: users } = useFetch("/api/users/top");
 <style scoped lang="scss">
 .olimp {
   &__title {
-    margin: 0;
+    margin-bottom: 1rem;
   }
   &__text {
     line-height: 150%;

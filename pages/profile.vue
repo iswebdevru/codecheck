@@ -60,7 +60,7 @@ const { data: challenges } = await useFetch(
                   class="item__lang-img"
                   v-for="lang in item.challengeVariant?.Challenge.variants"
                   :src="`/langs/${lang.lang.name?.toLowerCase()}.svg`"
-                  alt=""
+                  :alt="lang.lang.name"
                 />
               </div>
             </div>
